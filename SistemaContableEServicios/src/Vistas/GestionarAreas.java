@@ -5,17 +5,75 @@
  */
 package Vistas;
 
+import Controladores.AreaControlPrimario;
+import Controladores.AreaJpaController;
+import Controladores.CuentaJpaController;
+import Modelos.Area;
+import Modelos.AreaTableModel;
+import Modelos.Cuenta;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 /**
  *
  * @author Merii
  */
 public class GestionarAreas extends javax.swing.JFrame {
+    
+    public AreaTableModel areaTModel = new AreaTableModel();
 
     /**
      * Creates new form GestionarAreas
      */
     public GestionarAreas() {
         initComponents();
+        inicializarColumnas();
+        consultaInicial();
+    }
+    
+    private void inicializarColumnas(){
+        TableColumnModel tColumnModel=new DefaultTableColumnModel();
+        
+        for(int i=0; i<5;i++){
+            TableColumn col=new TableColumn(i);
+            
+            switch(i){
+                case 0:
+                    col.setHeaderValue("Código");
+                break;
+                case 1:
+                    col.setHeaderValue("Empresa");
+                break;
+                case 2:
+                    col.setHeaderValue("Nombre de Area");
+                break;
+                case 3:
+                    col.setHeaderValue("Descripcion");
+            }
+            tColumnModel.addColumn(col);
+        }
+        tablaAreas.setColumnModel(tColumnModel);
+        
+    }
+    
+     private void consultaInicial(){
+        try{
+            AreaJpaController areaControl=new AreaJpaController(login.conexion);
+            List <Area> listaArea=new ArrayList<Area>(); 
+            
+            listaArea=areaControl.findAreaEntities();
+            for (Area area:listaArea){
+                areaTModel.areas.add(area);
+            }
+            tablaAreas.repaint();
+
+        }catch(Exception e){
+            
+        }
     }
 
     /**
@@ -30,16 +88,16 @@ public class GestionarAreas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaAreas = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtDescripcion = new javax.swing.JTextArea();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -49,18 +107,8 @@ public class GestionarAreas extends javax.swing.JFrame {
 
         jLabel1.setText("Areas de la Empresa");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Numero de Area", "Empresa", "Nombre", "Descripcion"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tablaAreas.setModel(areaTModel);
+        jScrollPane1.setViewportView(tablaAreas);
 
         jLabel2.setText("Nueva Area Empresarial");
 
@@ -72,11 +120,16 @@ public class GestionarAreas extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txtDescripcion.setColumns(20);
+        txtDescripcion.setRows(5);
+        jScrollPane2.setViewportView(txtDescripcion);
 
         jButton2.setText("Guardar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Modificar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -102,7 +155,7 @@ public class GestionarAreas extends javax.swing.JFrame {
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
+                            .addComponent(txtNombre)
                             .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -121,7 +174,7 @@ public class GestionarAreas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -203,6 +256,19 @@ public class GestionarAreas extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        String nombre = txtNombre.getText();
+        String descripcion = txtDescripcion.getText();
+        
+        if(AreaControlPrimario.agregar(1, nombre, descripcion)){
+        JOptionPane.showMessageDialog(null, "Exito al guardar");
+        }else{
+        JOptionPane.showMessageDialog(null, "Error al guardar");
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -253,8 +319,8 @@ public class GestionarAreas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tablaAreas;
+    private javax.swing.JTextArea txtDescripcion;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }

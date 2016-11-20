@@ -131,5 +131,9 @@ public class Area implements Serializable {
     public String toString() {
         return "Modelos.Area[ idarea=" + idarea + " ]";
     }
+
+    public void setIdempresa(int empresa) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

@@ -17,19 +17,14 @@ import Modelos.Catalogocuenta;
 import Modelos.Cuenta;
 import Modelos.CuentaTableModel;
 import Modelos.Tipocuenta;
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Spliterator;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
@@ -51,313 +46,17 @@ public class CatalogoCuentas extends javax.swing.JFrame {
         inicializarColumnas();
         cboxEstado.addItem("Activa");
         cboxEstado.addItem("Inactiva");
-        //EntityManagerFactory conexion=Persistence.createEntityManagerFactory("EmpresaMultiServiciosContabilidadPU");
+        CatalogocuentaJpaController catalogoCuentaControl=new CatalogocuentaJpaController(login.conexion);
+        List <Catalogocuenta> listaCatalogoCuenta=new ArrayList<Catalogocuenta>();
         TipocuentaJpaController tipoCuentaControl=new TipocuentaJpaController(login.conexion);
-        List <Tipocuenta> listaTipoCuenta=new List<Tipocuenta>() {
-            @Override
-            public boolean removeIf(Predicate<? super Tipocuenta> filter) {
-                return List.super.removeIf(filter); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Stream<Tipocuenta> stream() {
-                return List.super.stream(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Stream<Tipocuenta> parallelStream() {
-                return List.super.parallelStream(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Spliterator<Tipocuenta> spliterator() {
-                return List.super.spliterator(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void forEach(Consumer<? super Tipocuenta> action) {
-                List.super.forEach(action); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int size() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean isEmpty() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Iterator<Tipocuenta> iterator() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Object[] toArray() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean add(Tipocuenta e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends Tipocuenta> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean addAll(int index, Collection<? extends Tipocuenta> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void replaceAll(UnaryOperator<Tipocuenta> operator) {
-                List.super.replaceAll(operator); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void sort(Comparator<? super Tipocuenta> c) {
-                List.super.sort(c); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void clear() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Tipocuenta get(int index) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Tipocuenta set(int index, Tipocuenta element) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void add(int index, Tipocuenta element) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Tipocuenta remove(int index) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public ListIterator<Tipocuenta> listIterator() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public ListIterator<Tipocuenta> listIterator(int index) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Tipocuenta> subList(int fromIndex, int toIndex) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
-        
+        List <Tipocuenta> listaTipoCuenta=new ArrayList<Tipocuenta>();
         BaseprorrateoJpaController baseProrrateoControl=new BaseprorrateoJpaController(login.conexion);
-        List <Baseprorrateo> listaBaseprorrateo=new List<Baseprorrateo>() {
-            @Override
-            public boolean removeIf(Predicate<? super Baseprorrateo> filter) {
-                return List.super.removeIf(filter); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Stream<Baseprorrateo> stream() {
-                return List.super.stream(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Stream<Baseprorrateo> parallelStream() {
-                return List.super.parallelStream(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Spliterator<Baseprorrateo> spliterator() {
-                return List.super.spliterator(); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void forEach(Consumer<? super Baseprorrateo> action) {
-                List.super.forEach(action); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int size() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean isEmpty() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean contains(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Iterator<Baseprorrateo> iterator() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Object[] toArray() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public <T> T[] toArray(T[] a) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean add(Baseprorrateo e) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean remove(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean containsAll(Collection<?> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean addAll(Collection<? extends Baseprorrateo> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean addAll(int index, Collection<? extends Baseprorrateo> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean removeAll(Collection<?> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public boolean retainAll(Collection<?> c) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void replaceAll(UnaryOperator<Baseprorrateo> operator) {
-                List.super.replaceAll(operator); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void sort(Comparator<? super Baseprorrateo> c) {
-                List.super.sort(c); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void clear() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Baseprorrateo get(int index) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Baseprorrateo set(int index, Baseprorrateo element) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void add(int index, Baseprorrateo element) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public Baseprorrateo remove(int index) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int indexOf(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int lastIndexOf(Object o) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public ListIterator<Baseprorrateo> listIterator() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public ListIterator<Baseprorrateo> listIterator(int index) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public List<Baseprorrateo> subList(int fromIndex, int toIndex) {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        }; 
+        List <Baseprorrateo> listaBaseprorrateo=new ArrayList<Baseprorrateo>();
         
+        listaCatalogoCuenta=catalogoCuentaControl.findCatalogocuentaEntities();
+        for (Catalogocuenta catalogo:listaCatalogoCuenta){
+            cboxCatalogo.addItem(catalogo.getIdcatalogo()+ ", "+catalogo.getNomcatalogo());  
+        }
         listaTipoCuenta=tipoCuentaControl.findTipocuentaEntities();
         for (Tipocuenta tipo:listaTipoCuenta){
             cboxTipoCuenta.addItem(tipo.getIdtipocuenta() + ", "+tipo.getNomtipocuenta());  
@@ -401,157 +100,7 @@ public class CatalogoCuentas extends javax.swing.JFrame {
     private void consultaInicial(){
         try{
             CuentaJpaController cuentaControl=new CuentaJpaController(login.conexion);
-            List <Cuenta> listaCuenta=new List<Cuenta>() {
-                @Override
-                public boolean removeIf(Predicate<? super Cuenta> filter) {
-                    return List.super.removeIf(filter); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Stream<Cuenta> stream() {
-                    return List.super.stream(); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Stream<Cuenta> parallelStream() {
-                    return List.super.parallelStream(); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Spliterator<Cuenta> spliterator() {
-                    return List.super.spliterator(); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void forEach(Consumer<? super Cuenta> action) {
-                    List.super.forEach(action); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public int size() {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean isEmpty() {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean contains(Object o) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Iterator<Cuenta> iterator() {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Object[] toArray() {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public <T> T[] toArray(T[] a) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean add(Cuenta e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean remove(Object o) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean containsAll(Collection<?> c) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean addAll(Collection<? extends Cuenta> c) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean addAll(int index, Collection<? extends Cuenta> c) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean removeAll(Collection<?> c) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public boolean retainAll(Collection<?> c) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void replaceAll(UnaryOperator<Cuenta> operator) {
-                    List.super.replaceAll(operator); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void sort(Comparator<? super Cuenta> c) {
-                    List.super.sort(c); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void clear() {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Cuenta get(int index) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Cuenta set(int index, Cuenta element) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void add(int index, Cuenta element) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public Cuenta remove(int index) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public int indexOf(Object o) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public int lastIndexOf(Object o) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public ListIterator<Cuenta> listIterator() {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public ListIterator<Cuenta> listIterator(int index) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public List<Cuenta> subList(int fromIndex, int toIndex) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-            };
+            List <Cuenta> listaCuenta=new ArrayList<Cuenta>(); 
             
             listaCuenta=cuentaControl.findCuentaEntities();
             for (Cuenta cuenta:listaCuenta){
@@ -597,6 +146,8 @@ public class CatalogoCuentas extends javax.swing.JFrame {
         cboxBaseProrrateo = new javax.swing.JComboBox<>();
         cboxTipoCuenta = new javax.swing.JComboBox<>();
         btnRegresar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        cboxCatalogo = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaCuentas = new javax.swing.JTable();
 
@@ -606,8 +157,6 @@ public class CatalogoCuentas extends javax.swing.JFrame {
         jLabel1.setText("Buscar Cuenta:");
 
         jLabel2.setText("Código de la Cuenta:");
-
-        txtBuscarCodCuenta.setBackground(java.awt.Color.white);
 
         btnBuscar.setText("Buscar");
         btnBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -652,14 +201,12 @@ public class CatalogoCuentas extends javax.swing.JFrame {
 
         jLabel7.setText("Tipo de Cuenta: ");
 
-        txtNomCuenta.setBackground(java.awt.Color.white);
         txtNomCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNomCuentaActionPerformed(evt);
             }
         });
 
-        txtCodCuenta.setBackground(java.awt.Color.white);
         txtCodCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCodCuentaActionPerformed(evt);
@@ -691,11 +238,14 @@ public class CatalogoCuentas extends javax.swing.JFrame {
 
         jLabel8.setText("Cuenta Padre:");
 
-        txtCuentaPadre.setBackground(java.awt.Color.white);
-
         jLabel10.setText("Base Prorrateo");
 
         cboxBaseProrrateo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
+        cboxBaseProrrateo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboxBaseProrrateoActionPerformed(evt);
+            }
+        });
 
         cboxTipoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
         cboxTipoCuenta.addActionListener(new java.awt.event.ActionListener() {
@@ -711,6 +261,10 @@ public class CatalogoCuentas extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Catálogo Cuenta:");
+
+        cboxCatalogo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "" }));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -718,6 +272,7 @@ public class CatalogoCuentas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
@@ -726,20 +281,21 @@ public class CatalogoCuentas extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jLabel8)
                             .addComponent(jLabel10)
-                            .addComponent(btnGuardar))
+                            .addComponent(btnGuardar)
+                            .addComponent(jLabel3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(btnNuevo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 261, Short.MAX_VALUE)
                                 .addComponent(btnRegresar))
                             .addComponent(txtNomCuenta)
                             .addComponent(cboxBaseProrrateo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtCuentaPadre)
                             .addComponent(cboxEstado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtCodCuenta)
-                            .addComponent(cboxTipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel4))
+                            .addComponent(cboxTipoCuenta, 0, 379, Short.MAX_VALUE)
+                            .addComponent(cboxCatalogo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -747,7 +303,7 @@ public class CatalogoCuentas extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtCodCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -755,28 +311,36 @@ public class CatalogoCuentas extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(txtNomCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(11, 11, 11)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(cboxTipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cboxEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtCuentaPadre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(cboxBaseProrrateo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnNuevo)
-                    .addComponent(btnRegresar))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 39, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(cboxTipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cboxEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(txtCuentaPadre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(cboxBaseProrrateo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnGuardar)
+                            .addComponent(btnNuevo)
+                            .addComponent(btnRegresar))
+                        .addGap(26, 26, 26))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cboxCatalogo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         tablaCuentas.setModel(cuentaTModel);
@@ -806,8 +370,8 @@ public class CatalogoCuentas extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -832,33 +396,38 @@ public class CatalogoCuentas extends javax.swing.JFrame {
         try{
             String codCuenta=txtCodCuenta.getText();
             String nomCuenta=txtNomCuenta.getText();
+            String StringCatalogoCuenta=(String) cboxCatalogo.getSelectedItem();
             String StringtipoCuenta=(String) cboxTipoCuenta.getSelectedItem();
             String estado=(String) cboxEstado.getSelectedItem();
             String stringCuentaPadre=txtCuentaPadre.getText();
             String stringBaseProrrateo=(String) cboxBaseProrrateo.getSelectedItem();
-            //EntityManagerFactory conexion=Persistence.createEntityManagerFactory("EmpresaMultiServiciosContabilidadPU");
             CuentaJpaController cuentaControl=new CuentaJpaController(login.conexion);
             Cuenta cuenta=new Cuenta();
             
-            cuenta.setCodcuenta(codCuenta);
-            cuenta.setNomcuenta(nomCuenta);
+            if(!codCuenta.isEmpty()){
+                cuenta.setCodcuenta(codCuenta);
+            }
+            if(!nomCuenta.isEmpty()){
+                cuenta.setNomcuenta(nomCuenta);
+            }
+            
             CatalogocuentaJpaController catalogoControl=new CatalogocuentaJpaController(login.conexion);
-            Catalogocuenta catalogo=catalogoControl.findCatalogocuenta(1); //idCatalogo=1, catalogo de cuentas actual de la empresa
-            
+            Catalogocuenta catalogo=catalogoControl.findCatalogocuenta(Integer.parseInt(StringCatalogoCuenta.split(", ")[0])); //idCatalogo=1, catalogo de cuentas actual de la empresa
             cuenta.setIdcatalogo(catalogo);
-            
             
             TipocuentaJpaController tipoCuentaControl=new TipocuentaJpaController(login.conexion);
             Tipocuenta idtipocuenta=tipoCuentaControl.findTipocuenta(StringtipoCuenta.split(", ")[0]);
             cuenta.setIdtipocuenta(idtipocuenta);
 
             cuenta.setEstadocuenta(estado.charAt(0));
+            cuenta.setSaldocuenta(BigDecimal.valueOf(0.0));
             
-            if(stringCuentaPadre != null && stringCuentaPadre != ""){
+            if(!stringCuentaPadre.isEmpty()){
                 Cuenta cuentaPadre=cuentaControl.findCuenta(stringCuentaPadre);
-                cuenta.setCueCodcuenta(cuentaPadre);   
+                cuentaPadre.getIdbase(); //Lanzaría una excepción si es null, y no se guardaría en la base de datps
+                cuenta.setCueCodcuenta(cuentaPadre);      
             } 
-            if(stringBaseProrrateo != null && stringBaseProrrateo != ""){
+            if(!stringBaseProrrateo.isEmpty()){
                 BaseprorrateoJpaController baseProrrateoControl=new BaseprorrateoJpaController(login.conexion);
                 Baseprorrateo base=baseProrrateoControl.findBaseprorrateo(Integer.parseInt(stringBaseProrrateo.split(", ")[0]));
                 cuenta.setIdbase(base);
@@ -918,6 +487,10 @@ public class CatalogoCuentas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
+    private void cboxBaseProrrateoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxBaseProrrateoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboxBaseProrrateoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -959,11 +532,13 @@ public class CatalogoCuentas extends javax.swing.JFrame {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JComboBox<String> cboxBaseProrrateo;
+    private javax.swing.JComboBox<String> cboxCatalogo;
     private javax.swing.JComboBox<String> cboxEstado;
     private javax.swing.JComboBox<String> cboxTipoCuenta;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;

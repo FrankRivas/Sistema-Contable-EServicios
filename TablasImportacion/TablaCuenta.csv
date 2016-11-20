@@ -1,0 +1,170 @@
+1101,1,11,,1,Efectivo y Equivalentes,A,0
+110101,1,11,1101,1,Efectivo en Caja General,A,0
+11010101,1,11,110101,1,Efectivo en Caja Chica,A,0
+110103,1,11,1101,1,Efectivo en Bancos,A,0
+11010301,1,11,110103,1,Efectivo en Cuentas de Ahorro,A,0
+110103010,1,11,11010301,1,BancoCuscatlan,A,0
+11010302,1,11,110103,1,Efectivo en Cuentas Corrientes,A,0
+110103020,1,11,11010302,1,Banco Cuscatlan,A,0
+110103021,1,11,11010302,1,Banco Agricola Comercial,A,0
+1103,1,11,,1,Deudores Comerciales y Otras CxC,A,0
+110301,1,11,1103,1,Clientes,A,0
+110302,1,11,1103,1,Documentos por Cobrar,A,0
+110303,1,11,1103,1,Deudores Varios,A,0
+110304,1,11,1103,1,Anticipos a Empleados,A,0
+110305,1,11,1103,1,Credito Fiscal IVA,A,0
+110306,1,11,1103,1,Pago a Cuenta ISR,A,0
+1103R,1,11,1103,1,Estimacion Cuentas Incobrables,A,0
+1105,1,11,,1,Pagos Anticipados,A,0
+110501,1,11,1105,1,Alquileres,A,0
+110502,1,11,1105,1,Intereses,A,0
+110503,1,11,1105,1,Primas de Seguros,A,0
+110504,1,11,1105,1,Papelerias y Utiles,A,0
+110505,1,11,1105,1,Otros Gastos Anticipados,A,0
+1106,1,11,,1,Activos Financieros,A,0
+110601,1,11,1106,1,Acciones,A,0
+110602,1,11,1106,1,Inversiones,A,0
+110603,1,11,1106,1,Bonos,A,0
+1201,1,12,,1,Propiedad Planta y Equipo,A,0
+120101,1,12,1201,1,Bienes Inmuebles,A,0
+12010101,1,12,120101,1,Terrenos,A,0
+120101011,1,12,12010101,1,Rusticos,A,0
+120101012,1,12,12010101,1,Urbanos,A,0
+12010102,1,12,120101,1,Edificios y Construcciones,A,0
+120101021,1,12,12010102,1,Edificios,A,0
+120101022,1,12,12010102,1,Construcciones en Proceso,A,0
+12010103,1,12,120101,1,Instalaciones y Otros,A,0
+120101031,1,12,12010103,1,Instalaciones,A,0
+120102,1,12,1201,1,Bienes Muebles,A,0
+12010204,1,12,120102,1,Mobiliario y Equipo de Oficina,A,0
+12010205,1,12,120102,1,Mobiliario y Equipo de Publicidad,A,0
+12010206,1,12,120102,1,Equipo de transporte,A,0
+120105,1,12,1201,1,Depreciacion Acumulada PP y E CR,A,0
+12010501,1,12,120105,1,Depreciacion Acumulada Edificios,A,0
+12010502,1,12,120105,1,Depreciacion Acum Const en Proc,A,0
+12010503,1,12,120105,1,Depreciacion Acum Instalaciones,A,0
+12010504,1,12,120105,1,Depreciacion Acum Mob y Equip Of,A,0
+12010505,1,12,120105,1,Depreciacion Acum Mob y Equip Publi,A,0
+12010506,1,12,120105,1,Depreciacion Acum Equipo Trans,A,0
+1301,1,13,,1,Activos Diferidos,A,0
+130101,1,13,1301,1,Amortizables,A,0
+13010101,1,13,130101,1,Software,A,0
+13010102,1,13,130101,1,Marcas y Patentes,A,0
+13010103,1,13,130101,1,Derechos de Llaves,A,0
+2101,1,21,,1,Deudoras Financieras Corto Plazo,A,0
+210101,1,21,2101,1,Deudoras con Entidad de Credito,A,0
+21010101,1,21,210101,1,Sobregiros Bancarios,A,0
+21010102,1,21,210101,1,Porcion Circulante de PLP,A,0
+21010103,1,21,210101,1,Prestamos Bancarios,A,0
+210102,1,21,2101,1,Otras Obligaciones Financieras CP,A,0
+21010201,1,21,210102,1,Asociaciones de Ahorro y Prestamo,A,0
+2102,1,21,,1,Deudas Comerciales y Otras CxP,A,0
+210201,1,21,2102,1,Proveedores,A,0
+21020101,1,21,210201,1,Proveedores Locales,A,0
+21020102,1,21,210201,1,Proveedores del Exterior,A,0
+210202,1,21,2102,1,Anticipo a Clientes x Cosecha,A,0
+21020203,1,21,210202,1,Ingresos de Clientes Adelantados,A,0
+210203,1,21,2102,1,Acreedores Diversos,A,0
+21020301,1,21,210203,1,Acreedores de Servicio,A,0
+210204,1,21,2102,1,Retencion y Otras Ctas Patronales,A,0
+21020401,1,21,210204,1,Retenciones x Pagar,A,0
+21020402,1,21,210204,1,Cuotas Patronales x Pagar,A,0
+2104,1,21,,1,Obligaciones a corto Plazo,A,0
+210401,1,21,2104,1,Sueldos y Salarios,A,0
+210402,1,21,2104,1,Vacasiones y Aguinaldo,A,0
+210403,1,21,2104,1,Obligaciones Obligatorias o Conve,A,0
+210404,1,21,2104,1,Otra Remuneracion y Prestacion,A,0
+2105,1,21,,1,Impuesto por Pagar,A,0
+210501,1,21,2105,1,Impuesto Mensual x Pagar,A,0
+21050101,1,21,210501,1,Debito Fiscal IVA,A,0
+21050102,1,21,210501,1,Retencion y Percepcion IVA,A,0
+21050103,1,21,210501,1,Pago a Cuenta e ISR x Pagar,A,0
+210502,1,21,2105,1,Impuesto,A,0
+21050201,1,21,210502,1,ISR anual x Pagar,A,0
+21050202,1,21,210502,1,Impuestos Municipales,A,0
+2106,1,21,,1,Dividendos por Pagar,A,0
+210601,1,21,2106,1,Dividendos Decretados x Pagar,A,0
+2107,1,21,,1,Provisiones,A,0
+210701,1,21,2107,1,Provisiones x Garantia Clientes,A,0
+2201,1,22,,1,Deudas Fiancieras Largo Plazo,A,0
+220101,1,22,2201,1,Deudas con Entidades Credito,A,0
+22010101,1,22,220101,1,Banco Cuscatlan,A,0
+220102,1,22,2201,1,Otras Obligaciones Largo Plazo,A,0
+2202,1,22,,1,Provisiones y Pasivos Largo Plazo,A,0
+220201,1,22,2202,1,Anticipos sobre Ventas,A,0
+220202,1,22,2202,1,Alquileres,A,0
+220203,1,22,2202,1,Intereses,A,0
+220204,1,22,2202,1,Provisiones x Reestruturacion,A,0
+2205,1,22,,1,Obligacion LP x Arrendamiento,A,0
+220501,1,22,2205,1,Arrendamiento Financiero x Pagar,A,0
+3101,1,31,,1,Capital Social,A,0
+310101,1,31,3101,1,Capital Social Minimo,A,0
+31010101,1,31,310101,1,Capital Social Minimo Suscrito,A,0
+31010102,1,31,310101,1,Capital Social Minimo no Pagado,A,0
+310102,1,31,3101,1,Capital Social Variable,A,0
+31010201,1,31,310102,1,Capital Social Varible Suscrito,A,0
+31010202,1,31,310102,1,Capital Social no Pagado,A,0
+3104,1,31,,1,Reserva Legal,A,0
+310401,1,31,3104,1,Reserva Legal(7%),A,0
+3105,1,31,,1,Resultados Acumulados,A,0
+310501,1,31,3105,1,Utilidades de Ejercicio Anterior,A,0
+310502,1,31,3105,1,Perdidas de Ejercicio Anterior,A,0
+3106,1,31,,1,Resultado del Ejercicio,A,0
+310601,1,31,3106,1,Utilidad del Presente Ejercicio,A,0
+310602,1,31,3106,1,Perdida del Presente Ejercicio,A,0
+3108,1,31,,1,Ajustes y Efectos por Valuacion,A,0
+310801,1,31,3108,1,Efectos Conversion a NIIF,A,0
+4101,1,41,,1,Costos Financieros,A,0
+410101,1,41,4101,1,Intereses sobre Prestamos,A,0
+410102,1,41,4101,1,Comisiones Bancarias,A,0
+4201,1,42,,1,Gastos de Administracion,A,0
+420101,1,42,4201,1,Sueldos y Salarios,A,0
+420102,1,42,4201,1,Bonificaciones y Comisiones,A,0
+420103,1,42,4201,1,Vacasiones,A,0
+420104,1,42,4201,1,Aguinaldos,A,0
+420105,1,42,4201,1,Cuota Patronal ISSS,A,0
+420106,1,42,4201,1,Cuota Patronal AFP,A,0
+420107,1,42,4201,1,Atenciones al Personal,A,0
+420108,1,42,4201,1,Agua Potable,A,0
+420109,1,42,4201,1,Energia Electrica,A,0
+420110,1,42,4201,1,Impuestos Fiscales,A,0
+420111,1,42,4201,1,Papeleria y Utiles,A,0
+420112,1,42,4201,1,Gatos de Representacion,A,0
+420113,1,42,4201,1,Vigilancia,A,0
+420114,1,42,4201,1,Depreciaciones,A,0
+420115,1,42,4201,1,Honorarios Profesionales,A,0
+420116,1,42,4201,1,Honorarios de Contabilidad,A,0
+420117,1,42,4201,1,Otros Gastos,A,0
+4301,1,43,,1,Gastos de Venta,A,0
+430101,1,43,4301,1,Sueldos y Salarios,A,0
+430102,1,43,4301,1,Bonificaciones y Comisiones,A,0
+430103,1,43,4301,1,Vacasiones,A,0
+430104,1,43,4301,1,Aguinaldos,A,0
+430105,1,43,4301,1,Cuota Patronal ISSS,A,0
+430106,1,43,4301,1,Cuota Patronal AFP,A,0
+430107,1,43,4301,1,Atenciones al Personal,A,0
+430108,1,43,4301,1,Agua Potable,A,0
+430109,1,43,4301,1,Energia Electrica,A,0
+430110,1,43,4301,1,Impuestos Fiscales,A,0
+430111,1,43,4301,1,Papeleria y Utiles,A,0
+430112,1,43,4301,1,Gastos de Representacion,A,0
+430113,1,43,4301,1,Vigilancia,A,0
+430114,1,43,4301,1,Depreciaciones,A,0
+430115,1,43,4301,1,Honorarios Profesionales,A,0
+430116,1,43,4301,1,Honorarios de Contabilidad,A,0
+430117,1,43,4301,1,Otros Gastos,A,0
+430118,1,43,4301,1,Perdida en Ventas de Activo,A,0
+430119,1,43,4301,1,Perdidas en Cambio de Moneda,A,0
+5101,1,51,,1,Servicios de Publicidad,A,0
+510101,1,51,5101,1,Perifoneos,A,0
+510102,1,51,5101,1,Eventos y Festivos,A,0
+510103,1,51,5101,1,Otros Ingresos de Operacion,A,0
+5102,1,51,,1,Productos Financieros,A,0
+510201,1,51,5102,1,Intereses Ganados,A,0
+510202,1,51,5102,1,Otros Productos Financieros,A,0
+5103,1,51,,1,Otros Productos,A,0
+510301,1,51,5103,1,Donaciones,A,0
+510302,1,51,5103,1,Reintegros de Gastos,A,0
+510303,1,51,5103,1,Utilidad en Venta de Activo Fijo,A,0
+510304,1,51,5103,1,Utilidad en Venta de Moneda Extran,A,0
+6101,1,61,,1,Perdidas y Ganancias,A,0

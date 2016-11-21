@@ -5,19 +5,31 @@
  */
 package Vistas;
 
+import Controladores.TipoCuentaControl;
+import Modelos.TCuentaTableModel;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 /**
  *
  * @author Merii
  */
 public class GestionarTiposCuentas extends javax.swing.JFrame {
-
+public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
     /**
      * Creates new form GestionarTiposCuentas
      */
     public GestionarTiposCuentas() {
         initComponents();
+        this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        TipoCuentaControl.inicializarColumnas();
+        TipoCuentaControl.consultaInicial();
     }
-
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,7 +41,7 @@ public class GestionarTiposCuentas extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaTipos = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -46,18 +58,8 @@ public class GestionarTiposCuentas extends javax.swing.JFrame {
 
         jLabel1.setText("Tipos de Cuentas");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Codigo", "Nombre"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tablaTipos.setModel(cTuentaTModel);
+        jScrollPane1.setViewportView(tablaTipos);
 
         jLabel2.setText("Gestionar Tipos de Cuentas");
 
@@ -217,8 +219,8 @@ public class GestionarTiposCuentas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    public static javax.swing.JTable tablaTipos;
     // End of variables declaration//GEN-END:variables
 }

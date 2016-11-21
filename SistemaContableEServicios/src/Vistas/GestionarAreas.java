@@ -33,7 +33,8 @@ public class GestionarAreas extends javax.swing.JFrame {
     public GestionarAreas() {
         initComponents();
         AreaControlPrimario.inicializarColumnas();
-        AreaControlPrimario.consultaInicial();
+        //AreaControlPrimario.consultaInicial();
+        
         comboEmpresa.removeAllItems();
         EmpresaJpaController empresaControl=new EmpresaJpaController(login.conexion);
         int cont = empresaControl.getEmpresaCount();
@@ -43,7 +44,7 @@ public class GestionarAreas extends javax.swing.JFrame {
   
         
         
-        //consultaInicial();
+        consultaInicial();
     }
     
     

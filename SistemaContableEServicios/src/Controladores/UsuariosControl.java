@@ -53,6 +53,7 @@ public class UsuariosControl {
     
       public static void consultaInicial(){
         try{
+            usuarioTModel.usuarios.clear();
             UsuarioJpaController usuarioControl=new UsuarioJpaController(login.conexion);
             List <Usuario> listaUsuarios=new ArrayList<Usuario>(); 
             

@@ -271,10 +271,11 @@ public class CrearUsuarios extends javax.swing.JFrame {
             
         if(UsuariosControl.crear(usuario, empleado, rol, contraseña)){
         JOptionPane.showMessageDialog(null, "Usuario Creado con exito");
-        //tablaUsuarios.removeAll();
-        //UsuariosControl.consultaInicial();
+        UsuariosControl.consultaInicial();
+      
         }else{
         JOptionPane.showMessageDialog(null, "Error al guardar");
+        
         }
         
        }else{

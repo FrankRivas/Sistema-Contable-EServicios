@@ -47,7 +47,7 @@ public class CatalogoCuentas extends javax.swing.JFrame {
         cboxEstado.addItem("Activa");
         cboxEstado.addItem("Inactiva");
         CatalogocuentaJpaController catalogoCuentaControl=new CatalogocuentaJpaController(login.conexion);
-        List <Catalogocuenta> listaCatalogoCuenta=new ArrayList<Catalogocuenta>();
+            List <Catalogocuenta> listaCatalogoCuenta=new ArrayList<Catalogocuenta>();
         TipocuentaJpaController tipoCuentaControl=new TipocuentaJpaController(login.conexion);
         List <Tipocuenta> listaTipoCuenta=new ArrayList<Tipocuenta>();
         BaseprorrateoJpaController baseProrrateoControl=new BaseprorrateoJpaController(login.conexion);

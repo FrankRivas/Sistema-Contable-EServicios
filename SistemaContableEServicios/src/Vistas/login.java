@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package Vistas;
+import Controladores.LoginControl;
 import Controladores.UsuarioJpaController;
 import Modelos.Usuario;
 import javax.persistence.EntityManagerFactory;
@@ -23,35 +24,6 @@ public class login extends javax.swing.JFrame {
 //EntityManagerFactory conexion=Persistence.createEntityManagerFactory("EmpresaMultiServiciosContabilidadPU");
 
 public static EntityManagerFactory conexion = Persistence.createEntityManagerFactory("SistemaContableEServiciosPU");
-    UsuarioJpaController controler = new UsuarioJpaController(conexion);
-    List<Usuario> users = new ArrayList<Usuario>();
-    
-     public void logearse() {
-        users = controler.findUsuarioEntities();
-        String usr = txtUser.getText();
-        String pas = txtContra.getText();
-        for (Usuario user1 : users) {
-
-            try {
-                if (usr.equals(user1.getNomusuario()) ){
-                    if (pas.equals(user1.getPassword())) {
-                       //aca iria el codigo para cargar la nueva ventana
-                       PrincipalContabilidad prin = new PrincipalContabilidad();
-                       prin.setVisible(true);
-                       prin.setLocationRelativeTo(null);
-                       this.setVisible(false);
-                       
-                       
-                    }
-                }else{
-                JOptionPane.showMessageDialog(null, "Error en los Datos");
-                }
-            } catch (Exception ex) {
-                System.out.println(ex);
-            }
-        }
-
-    }
     /**
      * Creates new form login
      */
@@ -174,29 +146,18 @@ public static EntityManagerFactory conexion = Persistence.createEntityManagerFac
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_IniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_IniciarSesionActionPerformed
-        //CrearCatalogo conta=new CrearCatalogo();
-        
-        //conta.setExtendedState(MAXIMIZED_BOTH);
-      /*  UsuarioJpaController userControl = new UsuarioJpaController(conexion);
-        String nombre = txtUser.getText();
-        char[] contra = txtContra.getPassword();
-        String password = new String(contra);
-        Usuario usuario = new Usuario();
-        Usuario user = new Usuario();
-        
-        user = userControl.findUsuario(1);
-        
-        user.getPassword();
-       usuario.setNomusuario(nombre);
-       usuario.setPassword(password);
+  
+       String nombre = txtUser.getText();
+       String contra = txtContra.getText();
        
-       PrincipalContabilidad conta=new PrincipalContabilidad();
-       conta.setVisible(true);
-       conta.setLocationRelativeTo(null);
-       this.setVisible(false);*/
-    
-    logearse();  
-        
+       if(LoginControl.validar(nombre, contra)){
+           PrincipalContabilidad conta=new PrincipalContabilidad();
+           conta.setVisible(true);
+           conta.setLocationRelativeTo(null);
+           this.setVisible(false);
+       }else{
+       JOptionPane.showMessageDialog(null, "Datos Incorrectos, Intente Nuevamente");
+       }
         
     }//GEN-LAST:event_btn_IniciarSesionActionPerformed
 

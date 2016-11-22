@@ -30,6 +30,7 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
         TipoCuentaControl.consultaInicial();
     }
     
+    
    
     /**
      * This method is called from within the constructor to initialize the form.
@@ -76,6 +77,11 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
         });
 
         jButton3.setText("Modificar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -190,6 +196,15 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
         JOptionPane.showMessageDialog(null, "Error en la Creacion");
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int val = tablaTipos.getSelectedRow();
+        String cod = (String)tablaTipos.getValueAt(val, 0);
+        String nombre = (String)tablaTipos.getValueAt(val, 1);
+        txtCod.setText(cod);
+        txtNomb.setText(nombre);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

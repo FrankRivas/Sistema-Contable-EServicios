@@ -82,6 +82,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuItem2 = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDetalleDiario = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -122,15 +123,17 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         manual = new javax.swing.JMenuItem();
         salir = new javax.swing.JMenuItem();
 
+        jMenuItem2.setText("jMenuItem2");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
 
         tablaDetalleDiario.setModel(detalleDTModel);
         tablaDetalleDiario.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 tablaDetalleDiarioInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         jScrollPane2.setViewportView(tablaDetalleDiario);
@@ -156,8 +159,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
                 btnAgregarTransacActionPerformed(evt);
             }
         });
-
-        txtFecha.setBackground(java.awt.Color.white);
 
         Archivo.setText("Archivo");
 
@@ -201,6 +202,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         Consultas.add(cuentasContables);
 
         partidasContables.setText("Partidas Contables");
+        partidasContables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                partidasContablesActionPerformed(evt);
+            }
+        });
         Consultas.add(partidasContables);
 
         jMenuBar1.add(Consultas);
@@ -520,6 +526,14 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_tablaDetalleDiarioInputMethodTextChanged
 
+    private void partidasContablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partidasContablesActionPerformed
+        // TODO add your handling code here:
+        AprobarPartida aprobar = new AprobarPartida();
+        aprobar.setVisible(true);
+        aprobar.setLocationRelativeTo(null);
+        this.setVisible(false);
+    }//GEN-LAST:event_partidasContablesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -577,6 +591,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;

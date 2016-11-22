@@ -2,6 +2,12 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/TEMP.DESKTOP-EV4GNJ0/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/PrincipalContabilidad.java</file>
+            <file>file:/C:/Users/TEMP.DESKTOP-EV4GNJ0/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/GestionarTiposCuentas.java</file>
+            <file>file:/C:/Users/TEMP.DESKTOP-EV4GNJ0/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/GestionarRoles.java</file>
+            <file>file:/C:/Users/TEMP.DESKTOP-EV4GNJ0/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/TipoCuentaControl.java</file>
+            <file>file:/C:/Users/TEMP.DESKTOP-EV4GNJ0/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/RolControl.java</file>
+        </group>
     </open-files>
 </project-private>

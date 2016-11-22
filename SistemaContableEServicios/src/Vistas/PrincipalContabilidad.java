@@ -15,6 +15,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -29,6 +31,7 @@ import javax.swing.text.MaskFormatter;
  */
 public class PrincipalContabilidad extends javax.swing.JFrame {
     public DetalleDiarioTableModel detalleDTModel=new DetalleDiarioTableModel();
+    public static String codCuentaSeleccionada;
     
 
     /**
@@ -82,7 +85,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuItem2 = new javax.swing.JMenuItem();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaDetalleDiario = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -123,17 +125,15 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         manual = new javax.swing.JMenuItem();
         salir = new javax.swing.JMenuItem();
 
-        jMenuItem2.setText("jMenuItem2");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
 
         tablaDetalleDiario.setModel(detalleDTModel);
         tablaDetalleDiario.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 tablaDetalleDiarioInputMethodTextChanged(evt);
+            }
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         jScrollPane2.setViewportView(tablaDetalleDiario);
@@ -159,6 +159,8 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
                 btnAgregarTransacActionPerformed(evt);
             }
         });
+
+        txtFecha.setBackground(java.awt.Color.white);
 
         Archivo.setText("Archivo");
 
@@ -202,11 +204,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         Consultas.add(cuentasContables);
 
         partidasContables.setText("Partidas Contables");
-        partidasContables.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                partidasContablesActionPerformed(evt);
-            }
-        });
         Consultas.add(partidasContables);
 
         jMenuBar1.add(Consultas);
@@ -386,7 +383,8 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if(detalleDTModel.listaDetalleDiario.size()!=0){
-            if(DiarioControl.validarPartidaDoble(detalleDTModel.listaDetalleDiario)){
+            if(!txtConcepto.getText().isEmpty()){
+                if(DiarioControl.validarPartidaDoble(detalleDTModel.listaDetalleDiario)){
                 DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 try{
                     Date fecha = format.parse(txtFecha.getText());
@@ -404,6 +402,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
             }else{
                 JOptionPane.showMessageDialog(this, "No se cumple Partida Doble, revisar datos en transacciones");
             }
+                
+            }else{
+                JOptionPane.showMessageDialog(this, "Por favor especifique el Concepto del Diario, antes de Guardarlo.");
+            }
+            
         }
         else{
             JOptionPane.showMessageDialog(this, "No hay transacciones a guardar en el Diario");    
@@ -505,10 +508,22 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_planillaSueldosActionPerformed
 
     private void btnAgregarTransacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarTransacActionPerformed
-        String codCuenta=JOptionPane.showInputDialog(this, "Ingrese el Código de la Cuenta");
-        try{
+        //String codCuenta=JOptionPane.showInputDialog(this, "Ingrese el Código de la Cuenta");
+        codCuentaSeleccionada="";
+        SeleccionarCuenta sel=new SeleccionarCuenta(this);
+        sel.setVisible(true);
+        sel.setLocationRelativeTo(null); 
+    }//GEN-LAST:event_btnAgregarTransacActionPerformed
+
+    private void tablaDetalleDiarioInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tablaDetalleDiarioInputMethodTextChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tablaDetalleDiarioInputMethodTextChanged
+    
+    public void agregarDetalle(){
+        if(codCuentaSeleccionada!=""){
+            try{
             CuentaJpaController cuentaControl=new CuentaJpaController(login.conexion);
-            Cuenta cuenta=cuentaControl.findCuenta(codCuenta);
+            Cuenta cuenta=cuentaControl.findCuenta(codCuentaSeleccionada);
             cuenta.getCodcuenta();
             Detallediario detalleD=new Detallediario();
             detalleD.setCodcuenta(cuenta);
@@ -517,23 +532,13 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
             //detalleDTModel.listaDetalleDiario.add(detalleD);
             detalleDTModel.addRow(detalleD);
             //tablaDetalleDiario.updateUI();       
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this, "Error en el codigo de la cuenta");
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Error en el codigo de la cuenta");
+            }   
+        }else{
+            JOptionPane.showMessageDialog(this, "Operación Cancelada!");
         }
-    }//GEN-LAST:event_btnAgregarTransacActionPerformed
-
-    private void tablaDetalleDiarioInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tablaDetalleDiarioInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_tablaDetalleDiarioInputMethodTextChanged
-
-    private void partidasContablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partidasContablesActionPerformed
-        // TODO add your handling code here:
-        AprobarPartida aprobar = new AprobarPartida();
-        aprobar.setVisible(true);
-        aprobar.setLocationRelativeTo(null);
-        this.setVisible(false);
-    }//GEN-LAST:event_partidasContablesActionPerformed
-
+    }
     /**
      * @param args the command line arguments
      */
@@ -591,7 +596,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;

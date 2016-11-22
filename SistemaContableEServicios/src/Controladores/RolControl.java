@@ -86,5 +86,22 @@ public class RolControl {
         }
     }
     
+    public static boolean modificar(int id, String nombre, String desc){
+    boolean resultado = true;
+    
+    RolJpaController rolControl = new RolJpaController(login.conexion);
+    Rol rol = rolControl.findRol(id);
+    rol.setNomrol(nombre);
+    rol.setDescripcionrol(desc);
+    try {
+    rolControl.edit(rol);
+    }catch(Exception w){
+    System.out.print(w);
+    resultado = false;
+    return resultado;
+    }
+    return resultado;
+    }
+    
     
 }

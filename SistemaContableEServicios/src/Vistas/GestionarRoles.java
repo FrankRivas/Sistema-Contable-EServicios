@@ -10,6 +10,7 @@ import static Controladores.RolControl.rolTModel;
 import Controladores.RolJpaController;
 import Modelos.Rol;
 import Modelos.RolTableModel;
+import static java.lang.Integer.parseInt;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
@@ -72,7 +73,7 @@ public class GestionarRoles extends javax.swing.JFrame {
         txtNRol = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDRol = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jButton4 = new javax.swing.JButton();
@@ -83,6 +84,11 @@ public class GestionarRoles extends javax.swing.JFrame {
         jLabel1.setText("Roles");
 
         tablaRoles.setModel(rolTModel);
+        tablaRoles.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaRolesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaRoles);
 
         jButton1.setText("Eliminar Seleccionado");
@@ -102,14 +108,19 @@ public class GestionarRoles extends javax.swing.JFrame {
         txtDRol.setRows(5);
         jScrollPane2.setViewportView(txtDRol);
 
-        jButton2.setText("Guardar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
 
         jButton3.setText("Modificar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -129,7 +140,7 @@ public class GestionarRoles extends javax.swing.JFrame {
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btnGuardar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(79, 79, 79))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -147,7 +158,7 @@ public class GestionarRoles extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtNRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(btnGuardar))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -203,9 +214,9 @@ public class GestionarRoles extends javax.swing.JFrame {
                 .addComponent(jButton1)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(31, 31, 31)
                 .addComponent(jButton4)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -223,7 +234,7 @@ public class GestionarRoles extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         String nomRol = txtNRol.getText();
         String desRol = txtDRol.getText();
@@ -235,7 +246,37 @@ public class GestionarRoles extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Error al crear Rol");
         }
         
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void tablaRolesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaRolesMouseClicked
+        // TODO add your handling code here:
+        int clics = evt.getClickCount();
+        if(clics==2){
+        int val = tablaRoles.getSelectedRow();
+        String nom = (String) tablaRoles.getValueAt(val, 1);
+        String desc = (String) tablaRoles.getValueAt(val, 2);
+        txtNRol.setText(nom);
+        txtDRol.setText(desc);
+        btnGuardar.setEnabled(false);
+        }
+    }//GEN-LAST:event_tablaRolesMouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int val = tablaRoles.getSelectedRow();
+        String nombre = txtNRol.getText();
+        String desc = txtDRol.getText();
+        
+       // int id = parseInt(idm);
+       
+        
+       /* if(RolControl.modificar(idm, nombre, desc)){
+        JOptionPane.showMessageDialog(null, "Rol Modificado con Exito");
+        RolControl.consultaInicial();
+        }else{
+        JOptionPane.showMessageDialog(null, "Error al Modificar");
+        }*/
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,8 +314,8 @@ public class GestionarRoles extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;

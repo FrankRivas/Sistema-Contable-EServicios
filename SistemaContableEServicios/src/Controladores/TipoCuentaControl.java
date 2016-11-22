@@ -77,5 +77,21 @@ public class TipoCuentaControl {
         }
             return resultado;
         }
+        
+        public static boolean editar(String codigo, String nombre){
+        boolean resultado = true;
+        
+        TipocuentaJpaController tCuentaControl = new TipocuentaJpaController(login.conexion);
+        Tipocuenta tCuenta = tCuentaControl.findTipocuenta(codigo);
+        tCuenta.setNomtipocuenta(nombre);
+        try{
+        tCuentaControl.edit(tCuenta);
+        }catch(Exception w){
+        System.out.print(w);
+        resultado = false;
+        return resultado;
+        }
+        return resultado;
+        }
 
 }

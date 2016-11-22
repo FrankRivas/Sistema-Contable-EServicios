@@ -6,8 +6,10 @@
 package Vistas;
 
 import Controladores.AreaJpaController;
+import Controladores.PuestoJpaController;
 import Controladores.PuestosControl;
 import Modelos.Area;
+import Modelos.Puesto;
 import Modelos.PuestoTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +62,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
         txtNombre = new javax.swing.JTextField();
         txtSalario = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDesc = new javax.swing.JTextArea();
@@ -118,6 +120,11 @@ public class GestionarPuestos extends javax.swing.JFrame {
         );
 
         tablaPuestos.setModel(puestoTModel);
+        tablaPuestos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaPuestosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaPuestos);
 
         jLabel5.setText("Area:");
@@ -126,12 +133,17 @@ public class GestionarPuestos extends javax.swing.JFrame {
 
         jLabel7.setText("Salario:");
 
-        jButton3.setText("Nuevo");
-
-        jButton4.setText("Guardar");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.setText("Modificar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
             }
         });
 
@@ -169,7 +181,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
                                 .addGap(112, 112, 112)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton3)
-                            .addComponent(jButton4))
+                            .addComponent(btnGuardar))
                         .addGap(143, 143, 143))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -197,7 +209,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
                         .addComponent(jButton3)))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4)
+                    .addComponent(btnGuardar)
                     .addComponent(jLabel8)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, Short.MAX_VALUE))
@@ -236,7 +248,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel4)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 33, Short.MAX_VALUE)))
+                        .addGap(0, 29, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -270,7 +282,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         String nombre = txtNombre.getText();
         Double sal = Double.parseDouble(txtSalario.getText());
@@ -283,8 +295,43 @@ public class GestionarPuestos extends javax.swing.JFrame {
         }else{
         JOptionPane.showMessageDialog(null, "Error al Crear Puesto");
         }
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void tablaPuestosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPuestosMouseClicked
+        // TODO add your handling code here:
+        int clics = evt.getClickCount();
+        if(clics==2){
+        int val = tablaPuestos.getSelectedRow();
+        int id = (int) tablaPuestos.getValueAt(val, 0);
+        String nom = (String) tablaPuestos.getValueAt(val, 1);
+        String des = (String) tablaPuestos.getValueAt(val, 3);
+        String sal = (String) tablaPuestos.getValueAt(val, 4);
+        txtNombre.setText(nom);
+        txtDesc.setText(des);
+        txtSalario.setText(sal);
+        
+        AreaJpaController aControl = new AreaJpaController(login.conexion);
+        PuestoJpaController pControl = new PuestoJpaController(login.conexion);
+        
+        Puesto puesto = pControl.findPuesto(id);
+        Area area = puesto.getIdarea();
+        comboArea.removeAllItems();
+        comboArea.addItem(area.getIdarea()+", "+area.getNomarea());
+        
+        List<Area> areaList = new ArrayList<Area>();
+        areaList = aControl.findAreaEntities();
+        for(Area areas:areaList){
+        if(areas.getIdempresa() != area.getIdempresa()){
+        comboArea.addItem(areas.getIdarea()+", "+areas.getNomarea());
+        }
+        }
+        btnGuardar.setEnabled(false); 
+    }//GEN-LAST:event_tablaPuestosMouseClicked
+    }
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+    }
     /**
      * @param args the command line arguments
      */
@@ -321,11 +368,11 @@ public class GestionarPuestos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JComboBox<String> comboArea;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

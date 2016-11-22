@@ -266,16 +266,14 @@ public class GestionarRoles extends javax.swing.JFrame {
         int val = tablaRoles.getSelectedRow();
         String nombre = txtNRol.getText();
         String desc = txtDRol.getText();
+        int id = (int) tablaRoles.getValueAt(val, 0);
         
-       // int id = parseInt(idm);
-       
-        
-       /* if(RolControl.modificar(idm, nombre, desc)){
+        if(RolControl.modificar(id, nombre, desc)){
         JOptionPane.showMessageDialog(null, "Rol Modificado con Exito");
         RolControl.consultaInicial();
         }else{
         JOptionPane.showMessageDialog(null, "Error al Modificar");
-        }*/
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

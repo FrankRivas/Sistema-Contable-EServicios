@@ -98,6 +98,31 @@ public class UsuariosControl {
       
       }
       
+      public static boolean modificar(int id, String nombre, String empleado, String rol, String contra){
+      boolean resultado = true;
+     
+      UsuarioJpaController usuarioControl = new UsuarioJpaController(login.conexion);
+      EmpleadoJpaController empControl = new EmpleadoJpaController(login.conexion);
+      RolJpaController rolControl = new RolJpaController(login.conexion);
+      
+      Empleado emp = empControl.findEmpleado(parseInt(empleado.split(", ")[0]));
+      Rol roles = rolControl.findRol(parseInt(rol.split(", ")[0]));
+      Usuario user = usuarioControl.findUsuario(id);
+      user.setNomusuario(nombre);
+      user.setCodempleado(emp);
+      user.setIdrol(roles);
+      user.setPassword(contra);
+      
+      try{
+      usuarioControl.edit(user);
+      }catch(Exception e){
+      System.out.print(e);
+      resultado = false;
+      return resultado;
+      }
+      return resultado;
+      }
+      
       public static boolean validar(String contr1, String contr2){
           String c1 = contr1;
           String c2 = contr2;

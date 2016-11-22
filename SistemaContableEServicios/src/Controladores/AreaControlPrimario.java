@@ -52,6 +52,27 @@ public class AreaControlPrimario {
         return resultado;
     }
     
+    public static boolean modificar(int id, String empresa, String nombre, String descripcion){
+        boolean resultado = true;
+        
+        AreaJpaController areaControl=new AreaJpaController(login.conexion);
+        EmpresaJpaController empControl = new EmpresaJpaController(login.conexion);
+        
+        Empresa emp = empControl.findEmpresa(parseInt(empresa.split(", ")[0]));
+        Area area1 = areaControl.findArea(id);
+        area1.setIdempresa(emp);
+        area1.setNomarea(nombre);
+        area1.setDescripcionarea(descripcion);
+        try{
+        areaControl.edit(area1);
+        }catch(Exception e){
+        System.out.print(e);
+        resultado = false;
+        return resultado;
+        }
+        return resultado;
+    }
+    
     
      
       

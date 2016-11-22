@@ -5,8 +5,10 @@
  */
 package Modelos;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 /**
  *
@@ -45,5 +47,26 @@ public class DetalleDiarioTableModel extends AbstractTableModel{
         }else{
             return true;
         }   
+    }
+    @Override
+    public void setValueAt(Object value, int row, int col) {
+        Detallediario detalleD=listaDetalleDiario.get(row);
+        try{
+            switch(col){
+            case 2: detalleD.setDebe(BigDecimal.valueOf(Double.parseDouble(value.toString())));
+            break;
+            case 3: detalleD.setHaber(BigDecimal.valueOf(Double.parseDouble(value.toString())));
+            break;
+            } 
+            
+        }catch(Exception e){
+        
+        }
+        listaDetalleDiario.set(row, detalleD);
+        fireTableCellUpdated(row, col);
+    }
+    public void addRow(Detallediario detalleD){
+        listaDetalleDiario.add(detalleD);
+        fireTableRowsInserted(listaDetalleDiario.size()-1, listaDetalleDiario.size()-1);
     }
 }

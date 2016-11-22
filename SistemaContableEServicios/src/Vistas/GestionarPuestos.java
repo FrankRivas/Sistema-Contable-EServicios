@@ -11,6 +11,7 @@ import Controladores.PuestosControl;
 import Modelos.Area;
 import Modelos.Puesto;
 import Modelos.PuestoTableModel;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -61,7 +62,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
         txtSalario = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        btnMod = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -133,7 +134,12 @@ public class GestionarPuestos extends javax.swing.JFrame {
 
         jLabel7.setText("Salario:");
 
-        jButton3.setText("Modificar");
+        btnMod.setText("Modificar");
+        btnMod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModActionPerformed(evt);
+            }
+        });
 
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -175,7 +181,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
                                     .addComponent(comboArea, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(112, 112, 112)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
+                            .addComponent(btnMod)
                             .addComponent(btnGuardar))
                         .addGap(143, 143, 143))
                     .addGroup(jPanel2Layout.createSequentialGroup()
@@ -201,7 +207,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
                             .addComponent(txtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
-                        .addComponent(jButton3)))
+                        .addComponent(btnMod)))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnGuardar)
@@ -276,7 +282,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
         con.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
-
+    
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         // TODO add your handling code here:
         String nombre = txtNombre.getText();
@@ -300,10 +306,10 @@ public class GestionarPuestos extends javax.swing.JFrame {
         int id = (int) tablaPuestos.getValueAt(val, 0);
         String nom = (String) tablaPuestos.getValueAt(val, 1);
         String des = (String) tablaPuestos.getValueAt(val, 3);
-        String sal = (String) tablaPuestos.getValueAt(val, 4);
+        String sal = (tablaPuestos.getValueAt(val, 4)).toString();
         txtNombre.setText(nom);
         txtDesc.setText(des);
-        txtSalario.setText(sal);
+        txtSalario.setText(sal);  
         
         AreaJpaController aControl = new AreaJpaController(login.conexion);
         PuestoJpaController pControl = new PuestoJpaController(login.conexion);
@@ -321,8 +327,26 @@ public class GestionarPuestos extends javax.swing.JFrame {
         }
         }
         btnGuardar.setEnabled(false); 
+    }        
     }//GEN-LAST:event_tablaPuestosMouseClicked
-    }
+
+    private void btnModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModActionPerformed
+        // TODO add your handling code here:
+        String nombre = txtNombre.getText();
+        Double sal = Double.parseDouble(txtSalario.getText());
+        String desc = txtDesc.getText();
+        String area = (String) comboArea.getSelectedItem();
+        int val = tablaPuestos.getSelectedRow();
+        int id = (int) tablaPuestos.getValueAt(val, 0);
+        
+        if(PuestosControl.Modificar(id, nombre, area, sal, desc)){
+        JOptionPane.showMessageDialog(null, "Puesto Modificado con Exito");
+        PuestosControl.consultaInicial();
+        }else{
+        JOptionPane.showMessageDialog(null, "Error al modificar el Puesto");
+        }
+    }//GEN-LAST:event_btnModActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -360,10 +384,10 @@ public class GestionarPuestos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnMod;
     private javax.swing.JComboBox<String> comboArea;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

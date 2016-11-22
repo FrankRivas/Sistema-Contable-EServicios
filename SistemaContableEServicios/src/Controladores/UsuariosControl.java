@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import static java.lang.Integer.parseInt;
 
 /**
  *
@@ -168,5 +169,21 @@ public class UsuariosControl {
        tablaUsuarios.removeAll();
        }
        }
+       
+ public static boolean borrar(int id){
+    boolean resultado = true;
+    UsuarioJpaController usControl = new UsuarioJpaController(login.conexion);
+  
+    try{
+    usControl.destroy(id);
+    }catch(Exception e){
+    System.out.print(e);
+    resultado = false;
+    return resultado;
+    }
+    return resultado;
+    
+    }
+    
     
 }

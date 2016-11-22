@@ -98,6 +98,11 @@ public class CrearUsuarios extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tablaUsuarios);
 
         jButton1.setText("Eliminar Seleccionado");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Crear/Modificar Usuario");
 
@@ -365,6 +370,19 @@ public class CrearUsuarios extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        int val = tablaUsuarios.getSelectedRow();
+        int id = (int) tablaUsuarios.getValueAt(val, 0);
+        
+        if(UsuariosControl.borrar(id)){
+        JOptionPane.showMessageDialog(null, "Usuario Eliminado con Exito");
+        UsuariosControl.consultaInicial();
+        }else{
+        JOptionPane.showMessageDialog(null, "No se pudo Eliminar el Usuario"); 
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

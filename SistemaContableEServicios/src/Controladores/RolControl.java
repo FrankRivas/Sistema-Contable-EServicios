@@ -103,5 +103,20 @@ public class RolControl {
     return resultado;
     }
     
+    public static boolean borrar(int id){
+    boolean resultado = true;
+    RolJpaController rolControl = new RolJpaController(login.conexion);
+  
+    try{
+    rolControl.destroy(id);
+    }catch(Exception e){
+    System.out.print(e);
+    resultado = false;
+    return resultado;
+    }
+    return resultado;
+    
+    }
+    
     
 }

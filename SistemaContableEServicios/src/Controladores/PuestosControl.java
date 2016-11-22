@@ -100,4 +100,26 @@ public class PuestosControl {
     return resultado;
     }
     
+    public static boolean Modificar(int id, String nombre, String area, double salario, String desc){
+    
+        boolean resultado = true;
+        PuestoJpaController puestoControl = new PuestoJpaController(login.conexion);
+        AreaJpaController areaControl = new AreaJpaController(login.conexion);
+    
+        Area area1 = areaControl.findArea(parseInt(area.split(", ")[0]));
+        Puesto pues = puestoControl.findPuesto(id);
+        pues.setNompuesto(nombre);
+        pues.setIdarea(area1);
+        pues.setSalario(BigDecimal.valueOf(salario));
+        pues.setDescripcionpuesto(desc);
+        try{
+        puestoControl.edit(pues);
+        }catch(Exception e){
+        System.out.print(e);
+        resultado = false;
+        return resultado;
+        }
+        return resultado;
+    }
+    
 }

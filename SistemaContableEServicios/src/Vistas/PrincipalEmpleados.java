@@ -5,17 +5,24 @@
  */
 package Vistas;
 
+import Controladores.EmpleadoControl;
+import Modelos.EmpleadoTableModel;
+
 /**
  *
  * @author kevin
  */
 public class PrincipalEmpleados extends javax.swing.JFrame {
+    
+    public static EmpleadoTableModel empleadoTModel = new EmpleadoTableModel();
 
     /**
      * Creates new form PrincipalEmpleados
      */
     public PrincipalEmpleados() {
         initComponents();
+        EmpleadoControl.inicializarColumnas();
+        EmpleadoControl.consultaInicial();
     }
 
     /**
@@ -28,7 +35,7 @@ public class PrincipalEmpleados extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaEmpleados = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -44,18 +51,8 @@ public class PrincipalEmpleados extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Cod", "Apellidos", "Nombres", "Puesto", "Salario", "Teléfono", "E-mail"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        tablaEmpleados.setModel(empleadoTModel);
+        jScrollPane1.setViewportView(tablaEmpleados);
 
         jLabel1.setText("Empleados:");
 
@@ -247,8 +244,8 @@ public class PrincipalEmpleados extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
+    public static javax.swing.JTable tablaEmpleados;
     // End of variables declaration//GEN-END:variables
 }

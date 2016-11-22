@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import static Vistas.GestionarAreas.areaTModel;
+import static java.lang.Integer.parseInt;
 
 /**
  *
@@ -26,21 +27,24 @@ import static Vistas.GestionarAreas.areaTModel;
 public class AreaControlPrimario {
     
     
-    public static boolean agregar(int empresa, String nombre, String descripcion){
+    public static boolean agregar(String empresa, String nombre, String descripcion){
         boolean resultado = true;
         Area area1 = new Area();
         AreaJpaController areaControl=new AreaJpaController(login.conexion);
         EmpresaJpaController empControl = new EmpresaJpaController(login.conexion);
         
-        Empresa emp = empControl.findEmpresa(empresa);
+        Empresa emp = empControl.findEmpresa(parseInt(empresa.split(", ")[0]));
+        int contArea = areaControl.getAreaCount();
+        area1.setIdarea(contArea+1);
         area1.setIdempresa(emp);
         area1.setNomarea(nombre);
         area1.setDescripcionarea(descripcion);
         
         try{
         areaControl.create(area1);
-            //JOptionPane.showMessageDialog(null, "Area creada con exito");
+            
         }catch(Exception ex){
+            System.out.print(ex);
             resultado = false;
             return resultado;
         
@@ -80,6 +84,7 @@ public class AreaControlPrimario {
         
          public static void consultaInicial(){
         try{
+            areaTModel.areas.clear();
             AreaJpaController areaControl=new AreaJpaController(login.conexion);
             List <Area> listaArea=new ArrayList<Area>(); 
             

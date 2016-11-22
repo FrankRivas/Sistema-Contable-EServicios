@@ -12,6 +12,7 @@ import Controladores.EmpresaJpaController;
 import Modelos.Area;
 import Modelos.AreaTableModel;
 import Modelos.Cuenta;
+import Modelos.Empresa;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -33,35 +34,15 @@ public class GestionarAreas extends javax.swing.JFrame {
     public GestionarAreas() {
         initComponents();
         AreaControlPrimario.inicializarColumnas();
-        //AreaControlPrimario.consultaInicial();
-        
+        AreaControlPrimario.consultaInicial();
         comboEmpresa.removeAllItems();
         EmpresaJpaController empresaControl=new EmpresaJpaController(login.conexion);
-        int cont = empresaControl.getEmpresaCount();
-        for(int i=0;i<cont;i++){
-        comboEmpresa.addItem(AreaControlPrimario.empresas(i+1));
+        List<Empresa> listaEmpresas = new ArrayList<Empresa>();
+        listaEmpresas = empresaControl.findEmpresaEntities();
+        for(Empresa empresa:listaEmpresas){
+        comboEmpresa.addItem(empresa.getIdempresa()+", "+empresa.getNomempresa());
         }
-  
-        
-        
-        consultaInicial();
-    }
-    
-    
-     private void consultaInicial(){
-        try{
-            AreaJpaController areaControl=new AreaJpaController(login.conexion);
-            List <Area> listaArea=new ArrayList<Area>(); 
-            
-            listaArea=areaControl.findAreaEntities();
-            for (Area area:listaArea){
-                areaTModel.areas.add(area);
-            }
-            tablaAreas.repaint();
 
-        }catch(Exception e){
-            
-        }
     }
 
     /**
@@ -95,14 +76,7 @@ public class GestionarAreas extends javax.swing.JFrame {
 
         jLabel1.setText("Areas de la Empresa");
 
-        tablaAreas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-
-            }
-        ));
+        tablaAreas.setModel(areaTModel);
         jScrollPane1.setViewportView(tablaAreas);
 
         jLabel2.setText("Nueva Area Empresarial");
@@ -260,9 +234,11 @@ public class GestionarAreas extends javax.swing.JFrame {
         // TODO add your handling code here:
         String nombre = txtNombre.getText();
         String descripcion = txtDescripcion.getText();
+        String empresa = (String) comboEmpresa.getSelectedItem();
         
-        if(AreaControlPrimario.agregar(1, nombre, descripcion)){
+        if(AreaControlPrimario.agregar(empresa, nombre, descripcion)){
         JOptionPane.showMessageDialog(null, "Exito al guardar");
+        AreaControlPrimario.consultaInicial();
         }else{
         JOptionPane.showMessageDialog(null, "Error al guardar");
         }

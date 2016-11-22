@@ -58,5 +58,24 @@ public class TipoCuentaControl {
             
         }
     }
+        
+        public static boolean crear(String codigo, String nombre){
+        boolean resultado = true;
+        
+        Tipocuenta tCuenta = new Tipocuenta();
+        TipocuentaJpaController tCuentaControl = new TipocuentaJpaController(login.conexion);
+        
+        tCuenta.setIdtipocuenta(codigo);
+        tCuenta.setNomtipocuenta(nombre);
+        
+        try{
+        tCuentaControl.create(tCuenta);
+        }catch(Exception e){
+            System.out.print(e);
+            resultado = false;
+            return resultado;
+        }
+            return resultado;
+        }
 
 }

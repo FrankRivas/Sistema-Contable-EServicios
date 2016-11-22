@@ -134,11 +134,6 @@ public class GestionarPuestos extends javax.swing.JFrame {
         jLabel7.setText("Salario:");
 
         jButton3.setText("Modificar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         btnGuardar.setText("Guardar");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -327,10 +322,6 @@ public class GestionarPuestos extends javax.swing.JFrame {
         }
         btnGuardar.setEnabled(false); 
     }//GEN-LAST:event_tablaPuestosMouseClicked
-    }
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
     }
     /**
      * @param args the command line arguments

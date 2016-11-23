@@ -39,7 +39,7 @@ public class CatalogoCuentas extends javax.swing.JFrame {
     /**
      * Creates new form CatalogoCuentas
      */
-    public CatalogoCuentas() {
+    public CatalogoCuentas() {  
         initComponents();
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

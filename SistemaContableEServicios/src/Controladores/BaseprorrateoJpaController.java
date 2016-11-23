@@ -227,4 +227,11 @@ public class BaseprorrateoJpaController implements Serializable {
         }
     }
     
+    /*public int getMaxDB(){
+        EntityManager em = getEntityManager();
+        Query q = em.createNativeQuery("select nextval('baseprorrateo_idbase_seq')");
+        Long val = (Long)q.getSingleResult();
+        return Integer.parseInt(val.toString());
+    }*/
+    
 }

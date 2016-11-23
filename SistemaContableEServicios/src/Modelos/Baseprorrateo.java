@@ -20,7 +20,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -41,10 +40,7 @@ public class Baseprorrateo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @SequenceGenerator(name="baseprorrateo_idbase_seq",
-                       sequenceName="baseprorrateo_idbase_seq",
-                       allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator="baseprorrateo_idbase_seq")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idbase")
     private Integer idbase;
@@ -70,11 +66,6 @@ public class Baseprorrateo implements Serializable {
         this.idbase = idbase;
     }
 
-    public Baseprorrateo(String nombase, BigDecimal totalbase) {
-        this.nombase = nombase;
-        this.totalbase = totalbase;
-    }
-    
     public Baseprorrateo(Integer idbase, String nombase, BigDecimal totalbase) {
         this.idbase = idbase;
         this.nombase = nombase;

@@ -5,17 +5,38 @@
  */
 package Vistas;
 
+import Controladores.AreaJpaController;
+import Controladores.PuestoJpaController;
+import Controladores.PuestosControl;
+import Modelos.Area;
+import Modelos.Puesto;
+import Modelos.PuestoTableModel;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author kevin
  */
 public class GestionarPuestos extends javax.swing.JFrame {
 
+    public static PuestoTableModel puestoTModel = new PuestoTableModel();
     /**
      * Creates new form GestionarPuestos
      */
     public GestionarPuestos() {
         initComponents();
+        PuestosControl.inicializarColumnas();
+        PuestosControl.consultaInicial();
+        comboArea.removeAllItems();
+        AreaJpaController areaControl = new AreaJpaController(login.conexion);
+        List<Area> listaAreas = new ArrayList<Area>();
+        listaAreas = areaControl.findAreaEntities();
+        for(Area area:listaAreas){
+        comboArea.addItem(area.getIdarea()+", "+area.getNomarea());
+        }
     }
 
     /**
@@ -34,19 +55,19 @@ public class GestionarPuestos extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaPuestos = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        txtNombre = new javax.swing.JTextField();
+        txtSalario = new javax.swing.JTextField();
+        btnMod = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        txtDesc = new javax.swing.JTextArea();
+        comboArea = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
@@ -99,18 +120,13 @@ public class GestionarPuestos extends javax.swing.JFrame {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Código", "Nombre", "Area", "Descripción", "Salario"
+        tablaPuestos.setModel(puestoTModel);
+        tablaPuestos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaPuestosMouseClicked(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(tablaPuestos);
 
         jLabel5.setText("Area:");
 
@@ -118,17 +134,27 @@ public class GestionarPuestos extends javax.swing.JFrame {
 
         jLabel7.setText("Salario:");
 
-        jButton3.setText("Nuevo");
+        btnMod.setText("Modificar");
+        btnMod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Guardar");
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Descripción:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        txtDesc.setColumns(20);
+        txtDesc.setRows(5);
+        jScrollPane2.setViewportView(txtDesc);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        comboArea.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -151,15 +177,15 @@ public class GestionarPuestos extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTextField5)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(txtSalario)
+                                    .addComponent(comboArea, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(112, 112, 112)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton3)
-                            .addComponent(jButton4))
+                            .addComponent(btnMod)
+                            .addComponent(btnGuardar))
                         .addGap(143, 143, 143))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
@@ -169,22 +195,22 @@ public class GestionarPuestos extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(comboArea, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(45, 45, 45)
-                        .addComponent(jButton3)))
+                        .addComponent(btnMod)))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4)
+                    .addComponent(btnGuardar)
                     .addComponent(jLabel8)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, Short.MAX_VALUE))
@@ -223,7 +249,7 @@ public class GestionarPuestos extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel4)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 33, Short.MAX_VALUE)))
+                        .addGap(0, 29, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -256,6 +282,70 @@ public class GestionarPuestos extends javax.swing.JFrame {
         con.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
+    
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        String nombre = txtNombre.getText();
+        Double sal = Double.parseDouble(txtSalario.getText());
+        String desc = txtDesc.getText();
+        String area = (String) comboArea.getSelectedItem();
+        
+        if(PuestosControl.Crear(nombre, area, sal, desc)){
+        JOptionPane.showMessageDialog(null, "El Puesto fue Creado con Exito");
+        PuestosControl.consultaInicial();
+        }else{
+        JOptionPane.showMessageDialog(null, "Error al Crear Puesto");
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void tablaPuestosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaPuestosMouseClicked
+        // TODO add your handling code here:
+        int clics = evt.getClickCount();
+        if(clics==2){
+        int val = tablaPuestos.getSelectedRow();
+        int id = (int) tablaPuestos.getValueAt(val, 0);
+        String nom = (String) tablaPuestos.getValueAt(val, 1);
+        String des = (String) tablaPuestos.getValueAt(val, 3);
+        String sal = (tablaPuestos.getValueAt(val, 4)).toString();
+        txtNombre.setText(nom);
+        txtDesc.setText(des);
+        txtSalario.setText(sal);  
+        
+        AreaJpaController aControl = new AreaJpaController(login.conexion);
+        PuestoJpaController pControl = new PuestoJpaController(login.conexion);
+        
+        Puesto puesto = pControl.findPuesto(id);
+        Area area = puesto.getIdarea();
+        comboArea.removeAllItems();
+        comboArea.addItem(area.getIdarea()+", "+area.getNomarea());
+        
+        List<Area> areaList = new ArrayList<Area>();
+        areaList = aControl.findAreaEntities();
+        for(Area areas:areaList){
+        if(areas.getIdempresa() != area.getIdempresa()){
+        comboArea.addItem(areas.getIdarea()+", "+areas.getNomarea());
+        }
+        }
+        btnGuardar.setEnabled(false); 
+    }        
+    }//GEN-LAST:event_tablaPuestosMouseClicked
+
+    private void btnModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModActionPerformed
+        // TODO add your handling code here:
+        String nombre = txtNombre.getText();
+        Double sal = Double.parseDouble(txtSalario.getText());
+        String desc = txtDesc.getText();
+        String area = (String) comboArea.getSelectedItem();
+        int val = tablaPuestos.getSelectedRow();
+        int id = (int) tablaPuestos.getValueAt(val, 0);
+        
+        if(PuestosControl.Modificar(id, nombre, area, sal, desc)){
+        JOptionPane.showMessageDialog(null, "Puesto Modificado con Exito");
+        PuestosControl.consultaInicial();
+        }else{
+        JOptionPane.showMessageDialog(null, "Error al modificar el Puesto");
+        }
+    }//GEN-LAST:event_btnModActionPerformed
 
     /**
      * @param args the command line arguments
@@ -293,12 +383,12 @@ public class GestionarPuestos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnMod;
+    private javax.swing.JComboBox<String> comboArea;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
@@ -312,10 +402,10 @@ public class GestionarPuestos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
+    public static javax.swing.JTable tablaPuestos;
+    private javax.swing.JTextArea txtDesc;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtSalario;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,14 +5,34 @@
  */
 package Vistas;
 
+import Controladores.CuentaJpaController;
+import Controladores.DiarioControl;
+import Modelos.Cuenta;
+import Modelos.DetalleDiarioTableModel;
+import Modelos.Detallediario;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
  * @author kevin
  */
 public class PrincipalContabilidad extends javax.swing.JFrame {
+    public DetalleDiarioTableModel detalleDTModel=new DetalleDiarioTableModel();
+    public static String codCuentaSeleccionada;
+    
 
     /**
      * Creates new form PrincipalContabilidad
@@ -26,11 +46,36 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         this.btnAceptar.setIcon(img);
         this.btnAceptar.setSize(img.getIconWidth(),img.getIconHeight());
         this.btnAceptar.setBorderPainted(false);
-        
         paintComponents(getGraphics());
         
+        inicializarColumnas();
+        SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
+        Date now = new Date();
+        txtFecha.setText(sdfDate.format(now));
+        
+        
     }
-
+    private void inicializarColumnas(){
+        TableColumnModel tColumnModel=new DefaultTableColumnModel();
+        for(int i=0; i<4;i++){
+            TableColumn col=new TableColumn(i);
+            switch(i){
+                case 0:
+                    col.setHeaderValue("Código");
+                break;
+                case 1:
+                    col.setHeaderValue("Nombre");
+                break;
+                case 2:
+                    col.setHeaderValue("Debe");  
+                break;
+                case 3:
+                    col.setHeaderValue("Haber");  
+            }
+            tColumnModel.addColumn(col);
+        }
+        tablaDetalleDiario.setColumnModel(tColumnModel);    
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,13 +86,14 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaDetalleDiario = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        txtConcepto = new javax.swing.JTextArea();
         btnAceptar = new javax.swing.JButton();
+        btnAgregarTransac = new javax.swing.JButton();
+        txtFecha = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         catalogoCuentas = new javax.swing.JMenuItem();
@@ -82,47 +128,39 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Codigo Contable", "Nombre de la Cuenta", "Debe", "Haber"
+        tablaDetalleDiario.setModel(detalleDTModel);
+        tablaDetalleDiario.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                tablaDetalleDiarioInputMethodTextChanged(evt);
             }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                true, false, true, true
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tablaDetalleDiario);
 
         jLabel2.setText("Fecha:");
 
         jLabel1.setText("Concepto:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtConcepto.setColumns(20);
+        txtConcepto.setRows(5);
+        jScrollPane1.setViewportView(txtConcepto);
 
-        jFormattedTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField1ActionPerformed(evt);
-            }
-        });
-
-        btnAceptar.setText("Aceptar");
+        btnAceptar.setText("Guardar Diario");
         btnAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAceptarActionPerformed(evt);
             }
         });
+
+        btnAgregarTransac.setText("Agregar Transacción");
+        btnAgregarTransac.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarTransacActionPerformed(evt);
+            }
+        });
+
+        txtFecha.setBackground(java.awt.Color.white);
 
         Archivo.setText("Archivo");
 
@@ -289,32 +327,39 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(39, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(34, 34, 34)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 783, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnAgregarTransac))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(39, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(34, 34, 34)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 783, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(51, 51, 51)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnAgregarTransac)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -326,7 +371,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(289, 289, 289)
                         .addComponent(btnAceptar)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         pack();
@@ -337,12 +382,36 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_libroDiarioActionPerformed
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        // TODO add your handling code here:
+        if(detalleDTModel.listaDetalleDiario.size()!=0){
+            if(!txtConcepto.getText().isEmpty()){
+                if(DiarioControl.validarPartidaDoble(detalleDTModel.listaDetalleDiario)){
+                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                try{
+                    Date fecha = format.parse(txtFecha.getText());
+                    if(DiarioControl.nuevoDiario(detalleDTModel.listaDetalleDiario, fecha, txtConcepto.getText())){
+                        JOptionPane.showMessageDialog(this, "Creación del Diario con éxito");
+                        txtConcepto.setText("");
+                        detalleDTModel.listaDetalleDiario.clear();
+                        tablaDetalleDiario.updateUI();
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Error en la creación del diario!");
+                    }
+                }catch(Exception e){
+                    JOptionPane.showMessageDialog(this, "Error en los datos de la fecha, recordar que el formato de la fecha es dd/mm/aaaa");
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "No se cumple Partida Doble, revisar datos en transacciones");
+            }
+                
+            }else{
+                JOptionPane.showMessageDialog(this, "Por favor especifique el Concepto del Diario, antes de Guardarlo.");
+            }
+            
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "No hay transacciones a guardar en el Diario");    
+        }  
     }//GEN-LAST:event_btnAceptarActionPerformed
-
-    private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
         this.setVisible(false);
@@ -392,6 +461,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
+        
         GestionarPuestos puesto = new GestionarPuestos();
         puesto.setVisible(true);
         puesto.setLocationRelativeTo(null);
@@ -438,6 +508,38 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_planillaSueldosActionPerformed
 
+    private void btnAgregarTransacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarTransacActionPerformed
+        //String codCuenta=JOptionPane.showInputDialog(this, "Ingrese el Código de la Cuenta");
+        codCuentaSeleccionada="";
+        SeleccionarCuenta sel=new SeleccionarCuenta(this);
+        sel.setVisible(true);
+        sel.setLocationRelativeTo(null); 
+    }//GEN-LAST:event_btnAgregarTransacActionPerformed
+
+    private void tablaDetalleDiarioInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tablaDetalleDiarioInputMethodTextChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tablaDetalleDiarioInputMethodTextChanged
+    
+    public void agregarDetalle(){
+        if(codCuentaSeleccionada!=""){
+            try{
+            CuentaJpaController cuentaControl=new CuentaJpaController(login.conexion);
+            Cuenta cuenta=cuentaControl.findCuenta(codCuentaSeleccionada);
+            cuenta.getCodcuenta();
+            Detallediario detalleD=new Detallediario();
+            detalleD.setCodcuenta(cuenta);
+            detalleD.setDebe(BigDecimal.valueOf(0.0));
+            detalleD.setHaber(BigDecimal.valueOf(0.0));
+            //detalleDTModel.listaDetalleDiario.add(detalleD);
+            detalleDTModel.addRow(detalleD);
+            //tablaDetalleDiario.updateUI();       
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Error en el codigo de la cuenta");
+            }   
+        }else{
+            JOptionPane.showMessageDialog(this, "Operación Cancelada!");
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -482,11 +584,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private javax.swing.JMenuItem balanzaAcumulada;
     private javax.swing.JMenuItem balanzaMensual;
     private javax.swing.JButton btnAceptar;
+    private javax.swing.JButton btnAgregarTransac;
     private javax.swing.JMenuItem catalogoCuentas;
     private javax.swing.JMenuItem cuentasContables;
     private javax.swing.JMenuItem estadoResultados;
     private javax.swing.JMenuItem issss;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
@@ -502,8 +604,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuItem libroDiario;
     private javax.swing.JMenuItem libroDiarioMayor;
     private javax.swing.JMenuItem libroMayor;
@@ -512,5 +612,8 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private javax.swing.JMenuItem planillaSueldos;
     private javax.swing.JMenu rrhh;
     private javax.swing.JMenuItem salir;
+    private javax.swing.JTable tablaDetalleDiario;
+    private javax.swing.JTextArea txtConcepto;
+    private javax.swing.JTextField txtFecha;
     // End of variables declaration//GEN-END:variables
 }

@@ -20,30 +20,23 @@ public class LoginControl {
     
     public static boolean validar(String nombre, String contra){
     
-        boolean resultado = true;
+        boolean resultado = false;
         UsuarioJpaController controler = new UsuarioJpaController(conexion);
         List<Usuario> users = new ArrayList<Usuario>();
-        
         users = controler.findUsuarioEntities();
         String usr = nombre;
         String pas = contra;
         for (Usuario user1 : users) {
-
             try {
                 if (usr.equals(user1.getNomusuario()) ){
                     if (pas.equals(user1.getPassword())) {
-                       resultado = true;
+                       return resultado = true;
                     }
-                }else{
-                resultado = false;
                 }
             } catch (Exception ex) {
-                System.out.println(ex);
-                resultado = false;
                 return resultado;
             }
         }
-        
         return resultado;
     }
     

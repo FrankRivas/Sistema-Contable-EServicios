@@ -44,7 +44,7 @@ public class UsuarioTableModel extends AbstractTableModel{
            case 3: valor = user.getPassword();
            break;
        }
-        return valor;
+        return valor; 
     }
     
 }

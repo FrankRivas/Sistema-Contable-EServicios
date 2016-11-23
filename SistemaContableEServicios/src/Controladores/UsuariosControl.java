@@ -18,6 +18,7 @@ import java.util.List;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import static java.lang.Integer.parseInt;
 
 /**
  *
@@ -53,6 +54,7 @@ public class UsuariosControl {
     
       public static void consultaInicial(){
         try{
+            usuarioTModel.usuarios.clear();
             UsuarioJpaController usuarioControl=new UsuarioJpaController(login.conexion);
             List <Usuario> listaUsuarios=new ArrayList<Usuario>(); 
             
@@ -95,6 +97,31 @@ public class UsuariosControl {
       
       return resultado;
       
+      }
+      
+      public static boolean modificar(int id, String nombre, String empleado, String rol, String contra){
+      boolean resultado = true;
+     
+      UsuarioJpaController usuarioControl = new UsuarioJpaController(login.conexion);
+      EmpleadoJpaController empControl = new EmpleadoJpaController(login.conexion);
+      RolJpaController rolControl = new RolJpaController(login.conexion);
+      
+      Empleado emp = empControl.findEmpleado(parseInt(empleado.split(", ")[0]));
+      Rol roles = rolControl.findRol(parseInt(rol.split(", ")[0]));
+      Usuario user = usuarioControl.findUsuario(id);
+      user.setNomusuario(nombre);
+      user.setCodempleado(emp);
+      user.setIdrol(roles);
+      user.setPassword(contra);
+      
+      try{
+      usuarioControl.edit(user);
+      }catch(Exception e){
+      System.out.print(e);
+      resultado = false;
+      return resultado;
+      }
+      return resultado;
       }
       
       public static boolean validar(String contr1, String contr2){
@@ -142,5 +169,21 @@ public class UsuariosControl {
        tablaUsuarios.removeAll();
        }
        }
+       
+ public static boolean borrar(int id){
+    boolean resultado = true;
+    UsuarioJpaController usControl = new UsuarioJpaController(login.conexion);
+  
+    try{
+    usControl.destroy(id);
+    }catch(Exception e){
+    System.out.print(e);
+    resultado = false;
+    return resultado;
+    }
+    return resultado;
+    
+    }
+    
     
 }

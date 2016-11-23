@@ -4,18 +4,69 @@
  * and open the template in the editor.
  */
 package Vistas;
-
+import Controladores.BaseprorrateoJpaController;
+import Controladores.CentrodecostoJpaController;
+import Controladores.exceptions.NonexistentEntityException;
+import Modelos.Baseprorrateo;
+import Modelos.Centrodecosto;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Merii
  */
 public class BasesyCentros extends javax.swing.JFrame {
-
+    DefaultTableModel basesTModel = new DefaultTableModel();
+    DefaultTableModel costosTModel = new DefaultTableModel();
+    BaseprorrateoJpaController baseCtrl = new BaseprorrateoJpaController(login.conexion);
+    CentrodecostoJpaController costoCtrl = new CentrodecostoJpaController(login.conexion);
     /**
      * Creates new form BasesyCentros
      */
     public BasesyCentros() {
         initComponents();
+        //Primero traer todas las entidades de prorrateo
+        basesTModel.addColumn("Numero de base");
+        basesTModel.addColumn("Nombre");
+        basesTModel.addColumn("Total de base");
+        jTable1.setModel(basesTModel);
+        costosTModel.addColumn("Numero de centro");
+        costosTModel.addColumn("Nombre");
+        costosTModel.addColumn("Base asignada");
+        costosTModel.addColumn("Costo");
+        jTable2.setModel(costosTModel);
+        List<Baseprorrateo> bases = baseCtrl.findBaseprorrateoEntities();
+        Object[] rowData = new Object[3];
+        String[] combos = new String[bases.size()];
+        int i=0;
+        for(Baseprorrateo b: bases){
+            combos[i]=b.getIdbase().toString()+", "+b.getNombase();
+            i++;
+            rowData[0] = b.getIdbase();
+            rowData[1] = b.getNombase();
+            rowData[2] = b.getTotalbase();
+            basesTModel.addRow(rowData);
+            List<Centrodecosto> centros = b.getCentrodecostoList();
+            Object[] rowCentro = new Object[4]; 
+            
+            for(Centrodecosto c:centros){
+                rowCentro[0] = c.getIdcentro();
+                rowCentro[1] = c.getNomcentro();
+                rowCentro[2] = b.getNombase();
+                rowCentro[3] = c.getTotalcosto();
+                costosTModel.addRow(rowCentro);
+            }
+        }
+        
+        jButton10.setVisible(false);  //Ocultando el boton de editar
+        jButton11.setVisible(false);  //Ocultando el boton de cancelar
+        jComboBox1.setModel(new DefaultComboBoxModel<>(combos));
+        
     }
 
     /**
@@ -42,6 +93,8 @@ public class BasesyCentros extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -59,7 +112,6 @@ public class BasesyCentros extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         jTextField4 = new javax.swing.JTextField();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
@@ -84,6 +136,11 @@ public class BasesyCentros extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton3.setText("Eliminar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Nueva Base de Prorrateo");
 
@@ -98,7 +155,19 @@ public class BasesyCentros extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("Modificar");
+        jButton10.setText("Cambiar");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        jButton11.setText("Cancelar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -109,21 +178,23 @@ public class BasesyCentros extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel5))
-                        .addGap(24, 24, 24)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton7)
-                .addGap(75, 75, 75))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel4)
+                                .addComponent(jLabel5))
+                            .addGap(24, 24, 24)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextField1)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 241, Short.MAX_VALUE)))
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                            .addComponent(jButton4)
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton11)
+                                .addComponent(jButton10))
+                            .addGap(5, 5, 5))))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -132,24 +203,29 @@ public class BasesyCentros extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 109, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton7)
-                            .addComponent(jButton4))
-                        .addGap(19, 19, 19))))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton10))
+                .addGap(18, 18, 18)
+                .addComponent(jButton11)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
+
+        jButton7.setText("Modificar");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -159,6 +235,8 @@ public class BasesyCentros extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
@@ -184,7 +262,9 @@ public class BasesyCentros extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(jButton7))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -206,6 +286,11 @@ public class BasesyCentros extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTable2);
 
         jButton2.setText("Eliminar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel6.setText("Nuevo Centro de Costo");
 
@@ -218,8 +303,11 @@ public class BasesyCentros extends javax.swing.JFrame {
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jButton5.setText("Guardar");
-
-        jButton6.setText("Modificar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -243,12 +331,10 @@ public class BasesyCentros extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(37, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(86, 86, 86)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6)
-                .addGap(58, 58, 58))
+                .addGap(164, 164, 164))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,9 +356,7 @@ public class BasesyCentros extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6))
+                .addComponent(jButton5)
                 .addContainerGap())
         );
 
@@ -374,9 +458,24 @@ public class BasesyCentros extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        // Codigo para guardar una nueva base de prorrateo
+        String nombre = jTextField1.getText();
+        BigDecimal total = new BigDecimal(jTextField2.getText().replace(",", ""));
+        Baseprorrateo nuevabase = new Baseprorrateo(nombre, total);
+        baseCtrl.create(nuevabase);
+        jTextField1.setText("");
+        jTextField2.setText("");
+        DefaultTableModel actualizacion = (DefaultTableModel)jTable1.getModel();
+        Object[] row = new Object[3];
+        int max = actualizacion.getRowCount()+1;
+        row[0] = max;
+        row[1] = nombre;
+        row[2] = total;
+        actualizacion.addRow(row);
+        jTable1.setModel(actualizacion);
+        
     }//GEN-LAST:event_jButton4ActionPerformed
-
+        
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
         PrincipalContabilidad con = new PrincipalContabilidad();
@@ -392,6 +491,140 @@ public class BasesyCentros extends javax.swing.JFrame {
         pro.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        int val = jTable1.getSelectedRow();
+        String row = jTable1.getValueAt(val, 0).toString()+", "+jTable1.getValueAt(val, 1);
+        int todel = Integer.parseInt(row.split(",")[0]);
+        try {
+            baseCtrl.destroy(todel);
+        } catch (NonexistentEntityException ex) {
+            Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //Quitarlo de la tabla
+        DefaultTableModel actualizacion = (DefaultTableModel)jTable1.getModel();
+        actualizacion.removeRow(val);
+        jTable1.setModel(actualizacion);
+        
+        //Quitarlo del combobox
+        DefaultComboBoxModel comboModel = (DefaultComboBoxModel)jComboBox1.getModel();
+        int valueid = comboModel.getIndexOf(row);
+        comboModel.removeElementAt(valueid);
+        jComboBox1.setModel(comboModel);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // Codigo para modificar el dato seleccionado en la DB
+        int val = jTable1.getSelectedRow();
+        int row = (Integer)jTable1.getValueAt(val, 0);
+        String nombre = (String)jTextField1.getText();
+        BigDecimal total = new BigDecimal(jTextField2.getText().replace(",", ""));
+        try {
+            Baseprorrateo toUpd = baseCtrl.findBaseprorrateo(row);
+            toUpd.setNombase(nombre);
+            toUpd.setTotalbase(total);
+            baseCtrl.edit(toUpd);
+        } catch (Exception ex) {
+            Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        DefaultTableModel actualizacion = (DefaultTableModel)jTable1.getModel();
+        actualizacion.setValueAt(row, val, 0);
+        actualizacion.setValueAt(nombre, val, 1);
+        actualizacion.setValueAt(total, val, 2);
+        jTable1.setModel(actualizacion);
+        
+        jButton10.setVisible(false);
+        jButton11.setVisible(false);
+        jButton4.setVisible(true);
+        jTextField1.setText("");
+        jTextField2.setText("");
+        
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // Codigo para cargar en los textfield para modificar el dato seleccionado 
+        int val = jTable1.getSelectedRow();
+        String nombre = (String)jTable1.getValueAt(val, 1);
+        BigDecimal total = (BigDecimal)jTable1.getValueAt(val, 2);
+        jTextField1.setText(nombre);
+        jTextField2.setText(total.toString());
+        jButton4.setVisible(false);
+        jButton10.setVisible(true);
+        jButton11.setVisible(true);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        jButton10.setVisible(false);
+        jButton11.setVisible(false);
+        jButton4.setVisible(true);
+        jTextField1.setText("");
+        jTextField2.setText("");
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // Guardar nuevo centros de costo y prorrateo
+        String idcentro = jTextField3.getText();
+        BigDecimal totalcentro = new BigDecimal(jTextField4.getText().replace(",", ""));
+        Centrodecosto centro = new Centrodecosto(idcentro, totalcentro);
+        String idbase = (String)jComboBox1.getSelectedItem();
+        int id = Integer.parseInt(idbase.split(",")[0]);
+        Baseprorrateo baseNueva = baseCtrl.findBaseprorrateo(id);
+        try {
+            List<Baseprorrateo> bases = new ArrayList();
+            bases.add(baseNueva);
+            centro.setBaseprorrateoList(bases);
+            costoCtrl.create(centro);
+        } catch (Exception e) {
+            Centrodecosto cen = costoCtrl.findCentrodecosto(id);
+            cen.getBaseprorrateoList().add(baseNueva);
+            try {
+                costoCtrl.edit(cen);
+            } catch (Exception ex) {
+                Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+  
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Codigo para elminar la combinacion de un centro de costo y una base
+        int index = jTable2.getSelectedRow();
+        int idcentro = (Integer)jTable2.getValueAt(index, 0);
+        String nomBase = jTable2.getValueAt(index, 2).toString();
+        Centrodecosto cost = costoCtrl.findCentrodecosto(idcentro);
+        System.out.println(nomBase);
+        List<Baseprorrateo> bases = cost.getBaseprorrateoList();
+        int indDel = -1;
+        for(Baseprorrateo b:bases){
+            System.out.println("Iterando");
+            if(b.getNombase().compareTo(nomBase)==0){
+                indDel = bases.indexOf(b);  
+            }
+        }
+        bases.remove(indDel);
+        cost.setBaseprorrateoList(bases);
+        
+        if(bases.isEmpty()){
+            System.out.println("Costo debe ser borrado tambien");
+            try { 
+                costoCtrl.destroy(idcentro);
+            } catch (NonexistentEntityException ex) {
+                Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else{
+           try {
+            costoCtrl.edit(cost);
+        } catch (Exception ex) {
+            Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        }
+        
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -430,11 +663,12 @@ public class BasesyCentros extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;

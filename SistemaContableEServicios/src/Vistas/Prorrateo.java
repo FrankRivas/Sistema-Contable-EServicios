@@ -5,17 +5,63 @@
  */
 package Vistas;
 
+import Controladores.BaseprorrateoJpaController;
+import Controladores.CentrodecostoJpaController;
+import Modelos.Baseprorrateo;
+import Modelos.Centrodecosto;
+import Modelos.Cuenta;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Merii
  */
 public class Prorrateo extends javax.swing.JFrame {
-
+    BaseprorrateoJpaController baseCtrl = new BaseprorrateoJpaController(login.conexion);
+    CentrodecostoJpaController costoCtrl = new CentrodecostoJpaController(login.conexion);
+    List<Baseprorrateo> bases = baseCtrl.findBaseprorrateoEntities();
+    List<Centrodecosto> costos = costoCtrl.findCentrodecostoEntities();
+    DefaultTableModel proTModel = new DefaultTableModel();
+    List<BigDecimal[]> datos = new ArrayList<>();
     /**
      * Creates new form Prorrateo
      */
     public Prorrateo() {
         initComponents();
+                    //Asignando las columnas
+        jTable1.setModel(proTModel);    
+        proTModel.addColumn("Base Prorrateo");
+        proTModel.addColumn("Total Base");
+           EntityManager entity = login.conexion.createEntityManager(); 
+           List<BigDecimal> numeros = entity.createNativeQuery("select totalcosto from centrodecosto natural join prorrateo order by idbase, nomcentro;").getResultList();
+           List<String> columnas = entity.createNativeQuery("select distinct nomcentro from centrodecosto order by nomcentro;").getResultList();
+           for(String col:columnas){
+               proTModel.addColumn(col);
+           }
+          Object [] row = new Object[columnas.size()+2];
+          int j=0;
+          
+          for(Baseprorrateo b:baseCtrl.findBaseprorrateoEntities()){
+              BigDecimal[] fila = new BigDecimal[columnas.size()];
+              row[0] = b.getNombase();
+              row[1] = b.getTotalbase();
+              for (int i = 0; i < columnas.size(); i++) {
+                  row[i+2] = numeros.get(i+(columnas.size()*j));
+                  BigDecimal p = numeros.get(i+(columnas.size()*j));
+                  BigDecimal q = b.getTotalbase();
+                  fila[i] = p.divide(q,2,BigDecimal.ROUND_HALF_UP);
+              }
+              j++;
+              datos.add(fila);
+              proTModel.addRow(row);
+          }
+        jTable1.setEnabled(false);
+
     }
 
     /**
@@ -99,16 +145,17 @@ public class Prorrateo extends javax.swing.JFrame {
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 858, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(42, 42, 42)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 795, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(53, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1)
+                        .addGap(21, 21, 21)))
+                .addGap(53, 53, 53))
             .addGroup(layout.createSequentialGroup()
-                .addGap(158, 158, 158)
+                .addGap(88, 88, 88)
                 .addComponent(jButton3)
-                .addGap(150, 150, 150)
-                .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(30, 30, 30)
                 .addComponent(jButton2)
-                .addGap(158, 158, 158))
+                .addGap(105, 105, 105))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,7 +180,16 @@ public class Prorrateo extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // Generar pdf de prorrateo
+        int i = 0;
+        for(Baseprorrateo b:bases){
+            //List<Cuenta> cuentas = b.getCuentaList();
+            BigDecimal[] coef = datos.get(i);
+            for (int j = 0; j < coef.length; j++) {
+                System.out.println(coef[j]);
+            }
+            
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -37,7 +38,10 @@ public class Centrodecosto implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="centrodecosto_idcentro_seq",
+                       sequenceName="centrodecosto_idcentro_seq",
+                       allocationSize=1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="centrodecosto_idcentro_seq")
     @Basic(optional = false)
     @Column(name = "idcentro")
     private Integer idcentro;
@@ -56,6 +60,11 @@ public class Centrodecosto implements Serializable {
 
     public Centrodecosto(Integer idcentro) {
         this.idcentro = idcentro;
+    }
+    
+    public Centrodecosto(String nomcentro, BigDecimal totalcosto) {
+        this.nomcentro = nomcentro;
+        this.totalcosto = totalcosto;
     }
 
     public Centrodecosto(Integer idcentro, String nomcentro, BigDecimal totalcosto) {

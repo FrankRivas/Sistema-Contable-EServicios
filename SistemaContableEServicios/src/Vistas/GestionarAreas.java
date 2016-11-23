@@ -8,11 +8,9 @@ package Vistas;
 import Controladores.AreaControlPrimario;
 import Controladores.AreaJpaController;
 import Controladores.CuentaJpaController;
-import Controladores.EmpresaJpaController;
 import Modelos.Area;
 import Modelos.AreaTableModel;
 import Modelos.Cuenta;
-import Modelos.Empresa;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -26,23 +24,56 @@ import javax.swing.table.TableColumnModel;
  */
 public class GestionarAreas extends javax.swing.JFrame {
     
-    public static AreaTableModel areaTModel = new AreaTableModel();
+    public AreaTableModel areaTModel = new AreaTableModel();
 
     /**
      * Creates new form GestionarAreas
      */
     public GestionarAreas() {
         initComponents();
-        AreaControlPrimario.inicializarColumnas();
-        AreaControlPrimario.consultaInicial();
-        comboEmpresa.removeAllItems();
-        EmpresaJpaController empresaControl=new EmpresaJpaController(login.conexion);
-        List<Empresa> listaEmpresas = new ArrayList<Empresa>();
-        listaEmpresas = empresaControl.findEmpresaEntities();
-        for(Empresa empresa:listaEmpresas){
-        comboEmpresa.addItem(empresa.getIdempresa()+", "+empresa.getNomempresa());
+        inicializarColumnas();
+        consultaInicial();
+    }
+    
+    private void inicializarColumnas(){
+        TableColumnModel tColumnModel=new DefaultTableColumnModel();
+        
+        for(int i=0; i<5;i++){
+            TableColumn col=new TableColumn(i);
+            
+            switch(i){
+                case 0:
+                    col.setHeaderValue("Código");
+                break;
+                case 1:
+                    col.setHeaderValue("Empresa");
+                break;
+                case 2:
+                    col.setHeaderValue("Nombre de Area");
+                break;
+                case 3:
+                    col.setHeaderValue("Descripcion");
+            }
+            tColumnModel.addColumn(col);
         }
+        tablaAreas.setColumnModel(tColumnModel);
+        
+    }
+    
+     private void consultaInicial(){
+        try{
+            AreaJpaController areaControl=new AreaJpaController(login.conexion);
+            List <Area> listaArea=new ArrayList<Area>(); 
+            
+            listaArea=areaControl.findAreaEntities();
+            for (Area area:listaArea){
+                areaTModel.areas.add(area);
+            }
+            tablaAreas.repaint();
 
+        }catch(Exception e){
+            
+        }
     }
 
     /**
@@ -64,10 +95,10 @@ public class GestionarAreas extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        comboEmpresa = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtDescripcion = new javax.swing.JTextArea();
-        btnGuardar = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -77,11 +108,6 @@ public class GestionarAreas extends javax.swing.JFrame {
         jLabel1.setText("Areas de la Empresa");
 
         tablaAreas.setModel(areaTModel);
-        tablaAreas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaAreasMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tablaAreas);
 
         jLabel2.setText("Nueva Area Empresarial");
@@ -92,21 +118,16 @@ public class GestionarAreas extends javax.swing.JFrame {
 
         jLabel5.setText("Descripcion:");
 
-        comboEmpresa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboEmpresa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboEmpresaActionPerformed(evt);
-            }
-        });
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         txtDescripcion.setColumns(20);
         txtDescripcion.setRows(5);
         jScrollPane2.setViewportView(txtDescripcion);
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        jButton2.setText("Guardar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -135,12 +156,12 @@ public class GestionarAreas extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtNombre)
-                            .addComponent(comboEmpresa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(163, 163, 163)
-                .addComponent(btnGuardar)
+                .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 251, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addGap(169, 169, 169))
@@ -157,14 +178,14 @@ public class GestionarAreas extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(comboEmpresa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardar)
+                    .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -225,18 +246,6 @@ public class GestionarAreas extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        String nombre = txtNombre.getText();
-        String descripcion = txtDescripcion.getText();
-        String empresa = (String) comboEmpresa.getSelectedItem();
-        int val = tablaAreas.getSelectedRow();
-        int id = (int) tablaAreas.getValueAt(val, 0);
-        
-        if(AreaControlPrimario.modificar(id, empresa, nombre, descripcion)){
-        JOptionPane.showMessageDialog(null, "Area Modificada con Exito");
-        AreaControlPrimario.consultaInicial();
-        }else{
-        JOptionPane.showMessageDialog(null, "Error al Modificar el Area");
-        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -247,55 +256,18 @@ public class GestionarAreas extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         String nombre = txtNombre.getText();
         String descripcion = txtDescripcion.getText();
-        String empresa = (String) comboEmpresa.getSelectedItem();
         
-        if(AreaControlPrimario.agregar(empresa, nombre, descripcion)){
+        if(AreaControlPrimario.agregar(1, nombre, descripcion)){
         JOptionPane.showMessageDialog(null, "Exito al guardar");
-        AreaControlPrimario.consultaInicial();
         }else{
         JOptionPane.showMessageDialog(null, "Error al guardar");
         }
         
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void comboEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboEmpresaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboEmpresaActionPerformed
-
-    private void tablaAreasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaAreasMouseClicked
-        // TODO add your handling code here:
-        int clics = evt.getClickCount();
-        if(clics==2){
-        int val = tablaAreas.getSelectedRow();
-        int id = (int) tablaAreas.getValueAt(val, 0);
-        String nom = (String) tablaAreas.getValueAt(val, 2);
-        String des = (String) tablaAreas.getValueAt(val, 3);
-        
-        txtNombre.setText(nom);
-        txtDescripcion.setText(des);
-        
-        EmpresaJpaController eControl = new EmpresaJpaController(login.conexion);
-        AreaJpaController aControl = new AreaJpaController(login.conexion);
-        
-        Area area = aControl.findArea(id);
-        Empresa emp = area.getIdempresa();
-        comboEmpresa.removeAllItems();
-        comboEmpresa.addItem(emp.getIdempresa()+", "+emp.getNomempresa());
-        
-        List<Empresa> empList = new ArrayList<Empresa>();
-        empList = eControl.findEmpresaEntities();
-        for(Empresa empr:empList){
-        if(empr.getIdempresa() != emp.getIdempresa()){
-        comboEmpresa.addItem(empr.getIdempresa()+", "+empr.getNomempresa());
-        }
-        }
-        btnGuardar.setEnabled(false);
-        }
-    }//GEN-LAST:event_tablaAreasMouseClicked
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -333,11 +305,11 @@ public class GestionarAreas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGuardar;
-    private javax.swing.JComboBox<String> comboEmpresa;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -347,7 +319,7 @@ public class GestionarAreas extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
-    public static javax.swing.JTable tablaAreas;
+    private javax.swing.JTable tablaAreas;
     private javax.swing.JTextArea txtDescripcion;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables

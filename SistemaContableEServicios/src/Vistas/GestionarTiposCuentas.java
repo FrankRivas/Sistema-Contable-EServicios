@@ -5,33 +5,19 @@
  */
 package Vistas;
 
-import Controladores.TipoCuentaControl;
-import Modelos.TCuentaTableModel;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableColumnModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-
 /**
  *
  * @author Merii
  */
 public class GestionarTiposCuentas extends javax.swing.JFrame {
-public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
+
     /**
      * Creates new form GestionarTiposCuentas
      */
     public GestionarTiposCuentas() {
         initComponents();
-        this.setResizable(false);
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        TipoCuentaControl.inicializarColumnas();
-        TipoCuentaControl.consultaInicial();
     }
-    
-    
-   
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,16 +29,16 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablaTipos = new javax.swing.JTable();
+        jTable1 = new javax.swing.JTable();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtCod = new javax.swing.JTextField();
-        txtNomb = new javax.swing.JTextField();
-        btnGuardar = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
@@ -60,13 +46,18 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
 
         jLabel1.setText("Tipos de Cuentas");
 
-        tablaTipos.setModel(cTuentaTModel);
-        tablaTipos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablaTiposMouseClicked(evt);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Codigo", "Nombre"
             }
-        });
-        jScrollPane1.setViewportView(tablaTipos);
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         jLabel2.setText("Gestionar Tipos de Cuentas");
 
@@ -74,19 +65,9 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
 
         jLabel4.setText("Nombre:");
 
-        btnGuardar.setText("Guardar");
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
+        jButton2.setText("Guardar");
 
         jButton3.setText("Modificar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -107,11 +88,11 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtCod)
-                    .addComponent(txtNomb, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE))
+                    .addComponent(jTextField1)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardar)
+                    .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addGap(133, 133, 133))
         );
@@ -125,11 +106,11 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtCod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGuardar))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNomb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(jButton3))
                 .addContainerGap(55, Short.MAX_VALUE))
@@ -189,47 +170,6 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
-        String nom = txtNomb.getText();
-        String cod = txtCod.getText();
-     
-        if(TipoCuentaControl.crear(cod, nom)){
-        JOptionPane.showMessageDialog(null, "El Tipo de Cuenta fue Creado con Exito");
-        TipoCuentaControl.consultaInicial();
-        }else{
-        JOptionPane.showMessageDialog(null, "Error en la Creacion");
-        }
-    }//GEN-LAST:event_btnGuardarActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        String cod = txtCod.getText();
-        String nom = txtNomb.getText();
-        
-        if(TipoCuentaControl.editar(cod, nom)){
-        JOptionPane.showMessageDialog(null, "Se modifico con exito");
-        TipoCuentaControl.consultaInicial();
-        }else{
-        JOptionPane.showMessageDialog(null, "Error al actualizar");
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void tablaTiposMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaTiposMouseClicked
-        // TODO add your handling code here:
-        
-        int clics = evt.getClickCount();
-        if(clics==2){
-        int val = tablaTipos.getSelectedRow();
-        String cod = (String)tablaTipos.getValueAt(val, 0);
-        String nombre = (String)tablaTipos.getValueAt(val, 1);
-        txtCod.setText(cod);
-        txtNomb.setText(nombre);
-        txtCod.setEditable(false);
-        btnGuardar.setEnabled(false);
-        }
-    }//GEN-LAST:event_tablaTiposMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -266,8 +206,8 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -277,8 +217,8 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    public static javax.swing.JTable tablaTipos;
-    private javax.swing.JTextField txtCod;
-    private javax.swing.JTextField txtNomb;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

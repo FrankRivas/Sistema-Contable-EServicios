@@ -23,6 +23,7 @@ public class DiarioControl {
     
     public static boolean nuevoDiario(List<Detallediario> listaDetalleDiario, Date fecha,String concepto){
         Diario diario=new Diario();
+        double saldoModificar;
         PeriodocontableJpaController periodoControl=new PeriodocontableJpaController(login.conexion);
         DiarioJpaController diarioControl=new DiarioJpaController(login.conexion);
         DetallediarioJpaController detalleDiarioControl=new DetallediarioJpaController(login.conexion);
@@ -40,8 +41,10 @@ public class DiarioControl {
             Diario recentCreatedDiario=listaDiarios.get(listaDiarios.size()-1);
             for(Detallediario detalle:listaDetalleDiario){
                 Cuenta cuenta=cuentaControl.findCuenta(detalle.getCodcuenta().getCodcuenta());
-                cuenta.setSaldocuenta(BigDecimal.valueOf(cuenta.getSaldocuenta().doubleValue() + detalle.getDebe().doubleValue() - detalle.getHaber().doubleValue()));
+                saldoModificar=detalle.getDebe().doubleValue() - detalle.getHaber().doubleValue();
+                cuenta.setSaldocuenta(BigDecimal.valueOf(cuenta.getSaldocuenta().doubleValue() + saldoModificar));
                 cuentaControl.edit(cuenta);
+                CuentaControl.actualizarSaldoCuentasPadre(cuenta, saldoModificar);
                 detalle.setIdregistro(recentCreatedDiario);
                 detalleDiarioControl.create(detalle);
             }
@@ -61,5 +64,13 @@ public class DiarioControl {
             return true;
         }
         return false;
+    }
+    public static boolean validarDetallesDiarios(List<Detallediario> listaDetalleDiario){
+        for(Detallediario detalle:listaDetalleDiario){
+            if(detalle.getDebe().doubleValue()==0.0)
+                if(detalle.getHaber().doubleValue()==0.0)
+                    return false;
+        }
+        return true;
     }
 }

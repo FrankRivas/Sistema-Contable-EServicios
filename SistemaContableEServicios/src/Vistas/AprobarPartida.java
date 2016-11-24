@@ -5,12 +5,16 @@
  */
 package Vistas;
 
+import Controladores.CuentaControl;
+import Controladores.CuentaJpaController;
 import Controladores.DetallediarioJpaController;
 import Controladores.DiarioJpaController;
+import Modelos.Cuenta;
 import Modelos.DetalleDiarioTableModel;
 import Modelos.Detallediario;
 import Modelos.Diario;
 import Modelos.DiarioTableModel;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -25,6 +29,7 @@ import javax.swing.table.TableColumnModel;
 public class AprobarPartida extends javax.swing.JFrame {
     public DiarioTableModel diarioTModel=new DiarioTableModel();
     public DetalleDiarioTableModel diarioDTModel=new DetalleDiarioTableModel();
+    double saldoModificar;
 
     /**
      * Creates new form AprobarPartida
@@ -83,11 +88,8 @@ public class AprobarPartida extends javax.swing.JFrame {
             }
             tablaDiario.repaint();
 
-        }catch(Exception e){
-            
+        }catch(Exception e){         
         }
-        
-        
     }
     private void llenarTablaDetalle(){
         diarioDTModel.listaDetalleDiario.clear();
@@ -291,12 +293,8 @@ public class AprobarPartida extends javax.swing.JFrame {
             try{
                 DiarioJpaController diarioControl=new DiarioJpaController(login.conexion);
                 Diario diario=diarioControl.findDiario(Integer.parseInt(txtCodigo.getText()));
-                
                 DetallediarioJpaController detalleControl=new DetallediarioJpaController(login.conexion);
-                List <Detallediario> listaDetalleDiario=new ArrayList<Detallediario>(); 
-            
-                listaDetalleDiario=detalleControl.findDetallediarioEntities();
-                for (Detallediario detalle:listaDetalleDiario){
+                for (Detallediario detalle:diarioDTModel.listaDetalleDiario){
                     if(detalle.getIdregistro().getIdregistro()==Integer.parseInt(txtCodigo.getText()))
                         detalleControl.destroy(detalle.getIddetalle());
                 }
@@ -331,6 +329,18 @@ public class AprobarPartida extends javax.swing.JFrame {
                 Diario diario=diarioControl.findDiario(Integer.parseInt(txtCodigo.getText()));
                 diario.setEstadodiario('A');
                 diarioControl.edit(diario);
+                //Actualizar saldos de las cuentas
+                DetallediarioJpaController detalleControl=new DetallediarioJpaController(login.conexion);
+                CuentaJpaController cuentaControl=new CuentaJpaController(login.conexion);
+                for(Detallediario detalle : diarioDTModel.listaDetalleDiario){
+                    if(detalle.getIdregistro().getIdregistro()==diario.getIdregistro()){
+                        Cuenta cuenta=cuentaControl.findCuenta(detalle.getCodcuenta().getCodcuenta());
+                        saldoModificar=detalle.getDebe().doubleValue() - detalle.getHaber().doubleValue();
+                        cuenta.setSaldocuenta(BigDecimal.valueOf(cuenta.getSaldocuenta().doubleValue() + saldoModificar));
+                        cuentaControl.edit(cuenta);
+                        CuentaControl.actualizarSaldoCuentasPadre(cuenta, saldoModificar);
+                    } 
+                }
                 actualizarVista();
                 JOptionPane.showMessageDialog(this,"Diario aprobado con exito!");
             }catch(Exception e){

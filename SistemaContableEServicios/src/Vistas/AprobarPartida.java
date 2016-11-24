@@ -5,19 +5,108 @@
  */
 package Vistas;
 
+import Controladores.DetallediarioJpaController;
+import Controladores.DiarioJpaController;
+import Modelos.DetalleDiarioTableModel;
+import Modelos.Detallediario;
+import Modelos.Diario;
+import Modelos.DiarioTableModel;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+
 /**
  *
  * @author Merii
  */
 public class AprobarPartida extends javax.swing.JFrame {
+    public DiarioTableModel diarioTModel=new DiarioTableModel();
+    public DetalleDiarioTableModel diarioDTModel=new DetalleDiarioTableModel();
 
     /**
      * Creates new form AprobarPartida
      */
     public AprobarPartida() {
         initComponents();
+        inicializarColumnas();
+        consultaInicial();
     }
+    
+    private void inicializarColumnas(){
+        TableColumnModel tDiarioColumnModel=new DefaultTableColumnModel();
+        for(int i=0; i<2;i++){
+            TableColumn col=new TableColumn(i);
+            switch(i){
+                case 0:
+                    col.setHeaderValue("Código");
+                break;
+                case 1:
+                    col.setHeaderValue("Concepto"); 
+            }
+            tDiarioColumnModel.addColumn(col);
+        }
+        tablaDiario.setColumnModel(tDiarioColumnModel);
+        
+        TableColumnModel tDetalleColumnModel=new DefaultTableColumnModel();
+        for(int i=0; i<4;i++){
+            TableColumn col=new TableColumn(i);
+            switch(i){
+                case 0:
+                    col.setHeaderValue("Código");
+                break;
+                case 1:
+                    col.setHeaderValue("Nombre");
+                break;
+                case 2:
+                    col.setHeaderValue("Debe");  
+                break;
+                case 3:
+                    col.setHeaderValue("Haber");  
+            }
+            tDetalleColumnModel.addColumn(col);
+        }
+        tablaDetalle.setColumnModel(tDetalleColumnModel);
+    }
+    
+    private void consultaInicial(){
+        try{
+            DiarioJpaController diarioControl=new DiarioJpaController(login.conexion);
+            List <Diario> listaDiario=new ArrayList<Diario>(); 
+            
+            listaDiario=diarioControl.findDiarioEntities();
+            for (Diario diario:listaDiario){
+                if(diario.getEstadodiario()=='N')//Mostrar sólo los diario No Aprobados.
+                    diarioTModel.listaDiario.add(diario);
+            }
+            tablaDiario.repaint();
 
+        }catch(Exception e){
+            
+        }
+        
+        
+    }
+    private void llenarTablaDetalle(){
+        diarioDTModel.listaDetalleDiario.clear();
+        if(!txtCodigo.getText().isEmpty()){
+            try{
+                DetallediarioJpaController detalleControl=new DetallediarioJpaController(login.conexion);
+                List <Detallediario> listaDetalleDiario=new ArrayList<Detallediario>(); 
+            
+                listaDetalleDiario=detalleControl.findDetallediarioEntities();
+                for (Detallediario detalle:listaDetalleDiario){
+                    if(detalle.getIdregistro().getIdregistro()==Integer.parseInt(txtCodigo.getText()))
+                        diarioDTModel.listaDetalleDiario.add(detalle);
+                }
+            }catch(Exception e){
+            }
+        }
+        tablaDetalle.updateUI();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -31,35 +120,35 @@ public class AprobarPartida extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        tablaDiario = new javax.swing.JTable();
+        btnAprobar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tablaDetalle = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        txtCodigo = new javax.swing.JTextField();
+        btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Aprobacion de Partidas");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Codigo", "Concepto"
+        tablaDiario.setModel(diarioTModel);
+        tablaDiario.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaDiarioMouseClicked(evt);
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        });
+        jScrollPane1.setViewportView(tablaDiario);
 
-        jButton1.setText("Aprobar");
+        btnAprobar.setText("Aprobar");
+        btnAprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAprobarActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Eliminar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -76,46 +165,38 @@ public class AprobarPartida extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1)
                 .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addComponent(jButton1)
-                .addGap(107, 107, 107)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addComponent(btnAprobar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(95, 95, 95))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(42, 42, 42))
+                    .addComponent(jButton2)
+                    .addComponent(btnAprobar))
+                .addContainerGap())
         );
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Codigo", "Cuenta", "Debe", "Haber"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        tablaDetalle.setModel(diarioDTModel);
+        jScrollPane2.setViewportView(tablaDetalle);
 
         jLabel2.setText("Numero de Partida:");
 
-        jButton3.setText("Regresar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        txtCodigo.setEditable(false);
+
+        btnRegresar.setText("Regresar");
+        btnRegresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnRegresarActionPerformed(evt);
             }
         });
 
@@ -126,29 +207,28 @@ public class AprobarPartida extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(24, 24, 24))
+                .addComponent(btnRegresar)
+                .addGap(21, 21, 21))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(92, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(27, 27, 27)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91)
-                .addComponent(jButton3)
-                .addContainerGap())
+                .addComponent(btnRegresar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -171,37 +251,69 @@ public class AprobarPartida extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(23, 23, 23)
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap()
-                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 397, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
         PrincipalContabilidad prin = new PrincipalContabilidad();
         prin.setVisible(true);
         prin.setLocationRelativeTo(null);
         this.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnRegresarActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void tablaDiarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDiarioMouseClicked
+        // TODO add your handling code here:
+        int clics = evt.getClickCount();
+        int row = tablaDiario.rowAtPoint(evt.getPoint());
+        if (clics == 2) {
+            String codDiario=tablaDiario.getValueAt(row, 0).toString();
+            txtCodigo.setText(codDiario);
+            llenarTablaDetalle();   
+        }
+    }//GEN-LAST:event_tablaDiarioMouseClicked
+
+    private void btnAprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAprobarActionPerformed
+        // TODO add your handling code here:
+        if(!txtCodigo.getText().isEmpty()){
+            try{
+                DiarioJpaController diarioControl=new DiarioJpaController(login.conexion);
+                Diario diario=diarioControl.findDiario(Integer.parseInt(txtCodigo.getText()));
+                diario.setEstadodiario('A');
+                diarioControl.edit(diario);
+                txtCodigo.setText("");
+                diarioTModel.listaDiario.clear();
+                consultaInicial();
+                llenarTablaDetalle();
+                tablaDiario.updateUI();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this,"Error al aprobar el Diario!");
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(this,"Seleccione el Diario que desea aprobar!");
+        }
+    }//GEN-LAST:event_btnAprobarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -239,9 +351,9 @@ public class AprobarPartida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnAprobar;
+    private javax.swing.JButton btnRegresar;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -250,8 +362,8 @@ public class AprobarPartida extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tablaDetalle;
+    private javax.swing.JTable tablaDiario;
+    private javax.swing.JTextField txtCodigo;
     // End of variables declaration//GEN-END:variables
 }

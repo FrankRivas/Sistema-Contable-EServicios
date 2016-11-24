@@ -160,8 +160,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
             }
         });
 
-        txtFecha.setBackground(java.awt.Color.white);
-
         Archivo.setText("Archivo");
 
         catalogoCuentas.setText("Catálogo de Cuentas");
@@ -204,6 +202,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         Consultas.add(cuentasContables);
 
         partidasContables.setText("Partidas Contables");
+        partidasContables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                partidasContablesActionPerformed(evt);
+            }
+        });
         Consultas.add(partidasContables);
 
         jMenuBar1.add(Consultas);
@@ -523,6 +526,13 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private void tablaDetalleDiarioInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_tablaDetalleDiarioInputMethodTextChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_tablaDetalleDiarioInputMethodTextChanged
+
+    private void partidasContablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partidasContablesActionPerformed
+        AprobarPartida aprobarP=new AprobarPartida();
+        aprobarP.setVisible(true);
+        aprobarP.setLocationRelativeTo(null);
+        this.setVisible(false);
+    }//GEN-LAST:event_partidasContablesActionPerformed
     
     public void agregarDetalle(){
         if(codCuentaSeleccionada!=""){

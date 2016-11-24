@@ -106,6 +106,13 @@ public class AprobarPartida extends javax.swing.JFrame {
         }
         tablaDetalle.updateUI();
     }
+    private void actualizarVista(){
+        txtCodigo.setText("");
+        diarioTModel.listaDiario.clear();
+        consultaInicial();
+        llenarTablaDetalle();
+        tablaDiario.updateUI();
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,7 +129,7 @@ public class AprobarPartida extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablaDiario = new javax.swing.JTable();
         btnAprobar = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -150,10 +157,10 @@ public class AprobarPartida extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Eliminar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
 
@@ -169,7 +176,7 @@ public class AprobarPartida extends javax.swing.JFrame {
                 .addGap(96, 96, 96)
                 .addComponent(btnAprobar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(btnEliminar)
                 .addGap(95, 95, 95))
         );
         jPanel1Layout.setVerticalGroup(
@@ -179,7 +186,7 @@ public class AprobarPartida extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btnEliminar)
                     .addComponent(btnAprobar))
                 .addContainerGap())
         );
@@ -278,9 +285,32 @@ public class AprobarPartida extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        if(!txtCodigo.getText().isEmpty()){
+            try{
+                DiarioJpaController diarioControl=new DiarioJpaController(login.conexion);
+                Diario diario=diarioControl.findDiario(Integer.parseInt(txtCodigo.getText()));
+                
+                DetallediarioJpaController detalleControl=new DetallediarioJpaController(login.conexion);
+                List <Detallediario> listaDetalleDiario=new ArrayList<Detallediario>(); 
+            
+                listaDetalleDiario=detalleControl.findDetallediarioEntities();
+                for (Detallediario detalle:listaDetalleDiario){
+                    if(detalle.getIdregistro().getIdregistro()==Integer.parseInt(txtCodigo.getText()))
+                        detalleControl.destroy(detalle.getIddetalle());
+                }
+                diarioControl.destroy(Integer.parseInt(txtCodigo.getText()));
+                actualizarVista();
+                JOptionPane.showMessageDialog(this,"Diario eliminado con exito!");
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this,"Error al eliminar el Diario!");
+            }
+            
+        }else{
+            JOptionPane.showMessageDialog(this,"Seleccione el Diario que desea eliminar!");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void tablaDiarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaDiarioMouseClicked
         // TODO add your handling code here:
@@ -301,11 +331,8 @@ public class AprobarPartida extends javax.swing.JFrame {
                 Diario diario=diarioControl.findDiario(Integer.parseInt(txtCodigo.getText()));
                 diario.setEstadodiario('A');
                 diarioControl.edit(diario);
-                txtCodigo.setText("");
-                diarioTModel.listaDiario.clear();
-                consultaInicial();
-                llenarTablaDetalle();
-                tablaDiario.updateUI();
+                actualizarVista();
+                JOptionPane.showMessageDialog(this,"Diario aprobado con exito!");
             }catch(Exception e){
                 JOptionPane.showMessageDialog(this,"Error al aprobar el Diario!");
             }
@@ -352,8 +379,8 @@ public class AprobarPartida extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAprobar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

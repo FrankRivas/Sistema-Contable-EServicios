@@ -132,21 +132,19 @@
                               <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="btnModificar" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace pref="261" max="32767" attributes="0"/>
-                                      <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="txtNomCuenta" max="32767" attributes="0"/>
-                                  <Component id="cboxBaseProrrateo" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtCuentaPadre" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cboxEstado" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="txtCodCuenta" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cboxTipoCuenta" alignment="0" pref="413" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="btnModificar" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace pref="261" max="32767" attributes="0"/>
+                                  <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Component id="cboxCatalogo" alignment="1" min="-2" pref="401" max="-2" attributes="0"/>
+                              <Component id="txtNomCuenta" max="32767" attributes="0"/>
+                              <Component id="cboxBaseProrrateo" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtCuentaPadre" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cboxEstado" alignment="0" max="32767" attributes="0"/>
+                              <Component id="txtCodCuenta" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cboxTipoCuenta" alignment="0" pref="413" max="32767" attributes="0"/>
+                              <Component id="cboxCatalogo" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>

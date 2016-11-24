@@ -383,33 +383,37 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
         if(detalleDTModel.listaDetalleDiario.size()!=0){
-            if(!txtConcepto.getText().isEmpty()){
+            if(DiarioControl.validarDetallesDiarios(detalleDTModel.listaDetalleDiario)){
                 if(DiarioControl.validarPartidaDoble(detalleDTModel.listaDetalleDiario)){
-                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                try{
-                    Date fecha = format.parse(txtFecha.getText());
-                    if(DiarioControl.nuevoDiario(detalleDTModel.listaDetalleDiario, fecha, txtConcepto.getText())){
-                        JOptionPane.showMessageDialog(this, "Creación del Diario con éxito");
-                        txtConcepto.setText("");
-                        detalleDTModel.listaDetalleDiario.clear();
-                        tablaDetalleDiario.updateUI();
+                    if(!txtConcepto.getText().isEmpty()){
+                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        try{
+                            Date fecha = format.parse(txtFecha.getText());
+                            if(DiarioControl.nuevoDiario(detalleDTModel.listaDetalleDiario, fecha, txtConcepto.getText())){
+                                JOptionPane.showMessageDialog(this, "Creación del Diario con éxito");
+                                txtConcepto.setText("");
+                                detalleDTModel.listaDetalleDiario.clear();
+                                tablaDetalleDiario.updateUI();
+                            }else{
+                                JOptionPane.showMessageDialog(this, "Error en la creación del diario!");
+                            }
+                        }catch(Exception e){
+                        JOptionPane.showMessageDialog(this, "Error en los datos de la fecha, recordar que el formato de la fecha es dd/mm/aaaa");
+                        }
                     }else{
-                        JOptionPane.showMessageDialog(this, "Error en la creación del diario!");
+                        JOptionPane.showMessageDialog(this, "Por favor especifique el Concepto del Diario, antes de Guardarlo.");
                     }
-                }catch(Exception e){
-                    JOptionPane.showMessageDialog(this, "Error en los datos de la fecha, recordar que el formato de la fecha es dd/mm/aaaa");
+                
+                }else{
+                    JOptionPane.showMessageDialog(this, "No se cumple Partida Doble, revisar datos en transacciones.");
                 }
             }else{
-                JOptionPane.showMessageDialog(this, "No se cumple Partida Doble, revisar datos en transacciones");
-            }
-                
-            }else{
-                JOptionPane.showMessageDialog(this, "Por favor especifique el Concepto del Diario, antes de Guardarlo.");
+                JOptionPane.showMessageDialog(this, "Error en las transacciones. Recuerde que no dejar el debe y el haber de alguna transaccion a 0.0");
             }
             
         }
         else{
-            JOptionPane.showMessageDialog(this, "No hay transacciones a guardar en el Diario");    
+            JOptionPane.showMessageDialog(this, "No hay transacciones a guardar en el Diario.");    
         }  
     }//GEN-LAST:event_btnAceptarActionPerformed
 

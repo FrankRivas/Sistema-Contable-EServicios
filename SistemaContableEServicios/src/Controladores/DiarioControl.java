@@ -5,12 +5,10 @@
  */
 package Controladores;
 
-import Modelos.Cuenta;
 import Modelos.Detallediario;
 import Modelos.Diario;
 import Modelos.Periodocontable;
 import Vistas.login;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,11 +21,9 @@ public class DiarioControl {
     
     public static boolean nuevoDiario(List<Detallediario> listaDetalleDiario, Date fecha,String concepto){
         Diario diario=new Diario();
-        double saldoModificar;
         PeriodocontableJpaController periodoControl=new PeriodocontableJpaController(login.conexion);
         DiarioJpaController diarioControl=new DiarioJpaController(login.conexion);
         DetallediarioJpaController detalleDiarioControl=new DetallediarioJpaController(login.conexion);
-        CuentaJpaController cuentaControl=new CuentaJpaController(login.conexion);
         Periodocontable periodo=periodoControl.findPeriodocontable(1); //Importar csv de periodo contable en la DB
         diario.setIdperiodo(periodo);
         //diario.setIdusuario(idusuario);
@@ -40,11 +36,7 @@ public class DiarioControl {
             listaDiarios=diarioControl.findDiarioEntities();
             Diario recentCreatedDiario=listaDiarios.get(listaDiarios.size()-1);
             for(Detallediario detalle:listaDetalleDiario){
-                Cuenta cuenta=cuentaControl.findCuenta(detalle.getCodcuenta().getCodcuenta());
-                saldoModificar=detalle.getDebe().doubleValue() - detalle.getHaber().doubleValue();
-                cuenta.setSaldocuenta(BigDecimal.valueOf(cuenta.getSaldocuenta().doubleValue() + saldoModificar));
-                cuentaControl.edit(cuenta);
-                CuentaControl.actualizarSaldoCuentasPadre(cuenta, saldoModificar);
+                //Asignando valor a llave foránea
                 detalle.setIdregistro(recentCreatedDiario);
                 detalleDiarioControl.create(detalle);
             }

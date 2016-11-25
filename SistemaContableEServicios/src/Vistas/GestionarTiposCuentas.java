@@ -197,8 +197,12 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
         if(TipoCuentaControl.crear(cod, nom)){
         JOptionPane.showMessageDialog(null, "El Tipo de Cuenta fue Creado con Exito");
         TipoCuentaControl.consultaInicial();
+        txtCod.setText("");
+        txtNomb.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error en la Creacion");
+        txtCod.setText("");
+        txtNomb.setText("");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -210,8 +214,14 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
         if(TipoCuentaControl.editar(cod, nom)){
         JOptionPane.showMessageDialog(null, "Se modifico con exito");
         TipoCuentaControl.consultaInicial();
+        txtCod.setText("");
+        txtNomb.setText("");
+        btnGuardar.setEnabled(true);
         }else{
         JOptionPane.showMessageDialog(null, "Error al actualizar");
+        txtCod.setText("");
+        txtNomb.setText("");
+        btnGuardar.setEnabled(true);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 /**
  *
@@ -578,16 +579,22 @@ public class BasesyCentros extends javax.swing.JFrame {
             bases.add(baseNueva);
             centro.setBaseprorrateoList(bases);
             costoCtrl.create(centro);
+            JOptionPane.showMessageDialog(null,"Centro Creado con Exito");
+            jTable2.updateUI();
         } catch (Exception e) {
             Centrodecosto cen = costoCtrl.findCentrodecosto(id);
             cen.getBaseprorrateoList().add(baseNueva);
             try {
                 costoCtrl.edit(cen);
+                JOptionPane.showMessageDialog(null, "Centro de Costo Modificado con Exito");
+                jTable2.updateUI();
             } catch (Exception ex) {
                 Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-  
+       jTextField3.setText("");
+       jTextField4.setText("");
+ 
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -612,12 +619,14 @@ public class BasesyCentros extends javax.swing.JFrame {
             System.out.println("Costo debe ser borrado tambien");
             try { 
                 costoCtrl.destroy(idcentro);
+                jTable2.updateUI();
             } catch (NonexistentEntityException ex) {
                 Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else{
            try {
             costoCtrl.edit(cost);
+            jTable2.updateUI();
         } catch (Exception ex) {
             Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
         } 

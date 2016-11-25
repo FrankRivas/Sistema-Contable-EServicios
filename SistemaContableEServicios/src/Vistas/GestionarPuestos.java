@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-
+ 
 /**
  *
  * @author kevin
@@ -293,8 +293,14 @@ public class GestionarPuestos extends javax.swing.JFrame {
         if(PuestosControl.Crear(nombre, area, sal, desc)){
         JOptionPane.showMessageDialog(null, "El Puesto fue Creado con Exito");
         PuestosControl.consultaInicial();
+        txtDesc.setText("");
+        txtNombre.setText("");
+        txtSalario.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al Crear Puesto");
+        txtDesc.setText("");
+        txtNombre.setText("");
+        txtSalario.setText("");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -342,9 +348,16 @@ public class GestionarPuestos extends javax.swing.JFrame {
         if(PuestosControl.Modificar(id, nombre, area, sal, desc)){
         JOptionPane.showMessageDialog(null, "Puesto Modificado con Exito");
         PuestosControl.consultaInicial();
+        txtDesc.setText("");
+        txtNombre.setText("");
+        txtSalario.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al modificar el Puesto");
+        txtDesc.setText("");
+        txtNombre.setText("");
+        txtSalario.setText("");
         }
+        btnGuardar.setEnabled(true); 
     }//GEN-LAST:event_btnModActionPerformed
 
     /**

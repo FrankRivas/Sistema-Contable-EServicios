@@ -296,14 +296,21 @@ public class CrearUsuarios extends javax.swing.JFrame {
         if(UsuariosControl.crear(usuario, empleado, rol, contraseña)){
         JOptionPane.showMessageDialog(null, "Usuario Creado con exito");
         UsuariosControl.consultaInicial();
-      
+        txtContra.setText("");
+        txtContra2.setText("");
+        txtUsuario.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al guardar");
-        
+        txtContra.setText("");
+        txtContra2.setText("");
+        txtUsuario.setText("");
         }
         
        }else{
         JOptionPane.showMessageDialog(null, "Las contraseñas son diferentes");
+        txtContra.setText("");
+        txtContra2.setText("");
+        
         }
         
         
@@ -365,10 +372,17 @@ public class CrearUsuarios extends javax.swing.JFrame {
         if(UsuariosControl.modificar(id, usuario, empleado, rol, contraseña)){
         JOptionPane.showMessageDialog(null, "Usuario Modificado con exito");
         UsuariosControl.consultaInicial();
+        txtContra.setText("");
+        txtContra2.setText("");
+        txtUsuario.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al Modificar Usuario");
+        txtContra.setText("");
+        txtContra2.setText("");
+        txtUsuario.setText("");
         }
         }
+        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -379,8 +393,14 @@ public class CrearUsuarios extends javax.swing.JFrame {
         if(UsuariosControl.borrar(id)){
         JOptionPane.showMessageDialog(null, "Usuario Eliminado con Exito");
         UsuariosControl.consultaInicial();
+        txtContra.setText("");
+        txtContra2.setText("");
+        txtUsuario.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "No se pudo Eliminar el Usuario"); 
+        txtContra.setText("");
+        txtContra2.setText("");
+        txtUsuario.setText("");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

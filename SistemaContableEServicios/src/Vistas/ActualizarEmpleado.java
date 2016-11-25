@@ -331,9 +331,28 @@ public class ActualizarEmpleado extends javax.swing.JFrame {
         
         if(EmpleadoControl.guardar(nom,ape,dui,nit,pu,ed,tel,dir,ema,is,afp,sex,est)){
             JOptionPane.showMessageDialog(null, "El Empleado fue Creado con Exito");
-            
+            txtAfp.setText("");
+            txtApellido.setText("");
+            txtDir.setText("");
+            txtDui.setText("");
+            txtEdad.setText("");
+            txtEmail.setText("");
+            txtIs.setText("");
+            txtNit.setText("");
+            txtNombre.setText("");
+            txtTel.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al crear Empleado");
+            txtAfp.setText("");
+            txtApellido.setText("");
+            txtDir.setText("");
+            txtDui.setText("");
+            txtEdad.setText("");
+            txtEmail.setText("");
+            txtIs.setText("");
+            txtNit.setText("");
+            txtNombre.setText("");
+            txtTel.setText("");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

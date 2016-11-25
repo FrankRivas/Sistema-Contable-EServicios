@@ -432,16 +432,22 @@ public class CatalogoCuentas extends javax.swing.JFrame {
         try {
             cuentaControl.create(cuenta);
             JOptionPane.showMessageDialog(this, "La cuenta ha sido guardada con éxito!");
-
+            txtCodCuenta.setText("");
+            txtCuentaPadre.setText("");
+            txtNomCuenta.setText("");
         } catch (Exception ex) {
             Logger.getLogger(CatalogoCuentas.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Error al guardar la cuenta!");
-
+            txtCodCuenta.setText("");
+            txtCuentaPadre.setText("");
+            txtNomCuenta.setText("");
         } 
         }
         catch(Exception e){
             JOptionPane.showMessageDialog(this, "Error en los datos de la cuenta!");
-
+            txtCodCuenta.setText("");
+            txtCuentaPadre.setText("");
+            txtNomCuenta.setText("");
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 

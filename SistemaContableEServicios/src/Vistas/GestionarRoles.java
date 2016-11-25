@@ -228,8 +228,12 @@ public class GestionarRoles extends javax.swing.JFrame {
         if(RolControl.borrar(id)){
         JOptionPane.showMessageDialog(null, "Rol Eliminado con Exito");
         RolControl.consultaInicial();
+        txtDRol.setText("");
+        txtNRol.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "No se pudo Eliminar el Rol"); 
+        txtDRol.setText("");
+        txtNRol.setText("");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -247,10 +251,16 @@ public class GestionarRoles extends javax.swing.JFrame {
         String desRol = txtDRol.getText();
         
         if(RolControl.agregar(nomRol, desRol)){
-        JOptionPane.showMessageDialog(null, "Rol Creado con exito");
+        tablaRoles.removeAll();
         RolControl.consultaInicial();
+        JOptionPane.showMessageDialog(null, "Rol Creado con exito");
+        tablaRoles.updateUI();
+        txtDRol.setText("");
+        txtNRol.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al crear Rol");
+        txtDRol.setText("");
+        txtNRol.setText("");
         }
         
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -278,9 +288,14 @@ public class GestionarRoles extends javax.swing.JFrame {
         if(RolControl.modificar(id, nombre, desc)){
         JOptionPane.showMessageDialog(null, "Rol Modificado con Exito");
         RolControl.consultaInicial();
+        txtDRol.setText("");
+        txtNRol.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al Modificar");
+        txtDRol.setText("");
+        txtNRol.setText("");
         }
+        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

@@ -234,9 +234,14 @@ public class GestionarAreas extends javax.swing.JFrame {
         if(AreaControlPrimario.modificar(id, empresa, nombre, descripcion)){
         JOptionPane.showMessageDialog(null, "Area Modificada con Exito");
         AreaControlPrimario.consultaInicial();
+        txtDescripcion.setText("");
+        txtNombre.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al Modificar el Area");
+        txtDescripcion.setText("");
+        txtNombre.setText("");
         }
+        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -256,8 +261,12 @@ public class GestionarAreas extends javax.swing.JFrame {
         if(AreaControlPrimario.agregar(empresa, nombre, descripcion)){
         JOptionPane.showMessageDialog(null, "Exito al guardar");
         AreaControlPrimario.consultaInicial();
+        txtDescripcion.setText("");
+        txtNombre.setText("");
         }else{
         JOptionPane.showMessageDialog(null, "Error al guardar");
+         txtDescripcion.setText("");
+        txtNombre.setText("");
         }
         
     }//GEN-LAST:event_btnGuardarActionPerformed

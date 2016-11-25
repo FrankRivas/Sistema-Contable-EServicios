@@ -182,6 +182,7 @@ IDEMPRESA
 create table CENTRODECOSTO (
    IDCENTRO             SERIAL               not null,
    NOMCENTRO            VARCHAR(20)          not null,
+   TOTALCOSTO           DECIMAL(8,2)         not null,
    constraint PK_CENTRODECOSTO primary key (IDCENTRO)
 );
 
@@ -402,7 +403,6 @@ IDPERIODO
 create table PRORRATEO (
    IDCENTRO             INT4                 not null,
    IDBASE               INT4                 not null,
-   TOTALCOSTO           DECIMAL(20,8)         not null,
    constraint PK_PRORRATEO primary key (IDCENTRO, IDBASE)
 );
 

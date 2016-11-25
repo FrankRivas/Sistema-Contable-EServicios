@@ -24,7 +24,7 @@ import static java.lang.Integer.parseInt;
  *
  * @author Merii
  */
-public class AreaControlPrimario {
+public class AreaControlPrimario { 
     
     
     public static boolean agregar(String empresa, String nombre, String descripcion){

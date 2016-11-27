@@ -24,10 +24,13 @@ import javax.swing.table.DefaultTableModel;
 public class Prorrateo extends javax.swing.JFrame {
     BaseprorrateoJpaController baseCtrl = new BaseprorrateoJpaController(login.conexion);
     CentrodecostoJpaController costoCtrl = new CentrodecostoJpaController(login.conexion);
-    List<Baseprorrateo> bases = baseCtrl.findBaseprorrateoEntities();
-    List<Centrodecosto> costos = costoCtrl.findCentrodecostoEntities();
+    List<Baseprorrateo> bases = new ArrayList<>();//baseCtrl.findBaseprorrateoEntities();
+    List<Centrodecosto> centros = costoCtrl.findCentrodecostoEntities();
     DefaultTableModel proTModel = new DefaultTableModel();
+    List<String> nomBases = new ArrayList<>();
+    List<BigDecimal[]> coef = new ArrayList<>();
     List<BigDecimal[]> datos = new ArrayList<>();
+    EntityManager entity = login.conexion.createEntityManager(); 
     /**
      * Creates new form Prorrateo
      */
@@ -37,16 +40,27 @@ public class Prorrateo extends javax.swing.JFrame {
         jTable1.setModel(proTModel);    
         proTModel.addColumn("Base Prorrateo");
         proTModel.addColumn("Total Base");
-           EntityManager entity = login.conexion.createEntityManager(); 
-           List<BigDecimal> numeros = entity.createNativeQuery("select totalcosto from centrodecosto natural join prorrateo order by idbase, nomcentro;").getResultList();
-           List<String> columnas = entity.createNativeQuery("select distinct nomcentro from centrodecosto order by nomcentro;").getResultList();
-           for(String col:columnas){
-               proTModel.addColumn(col);
+        for(Centrodecosto c:centros){
+               proTModel.addColumn(c.getNomcentro());
            }
-          Object [] row = new Object[columnas.size()+2];
+        Object [] row = new Object[centros.size()+2];    
+        nomBases = entity.createNativeQuery("select distinct nombase from baseprorrateo natural join cuenta").getResultList();
+        for(String b:nomBases){
+            row[0] = b;
+            Baseprorrateo base = baseCtrl.findBaseprorrateoByName(b);
+            row[1] = base.getTotalbase();
+            bases.add(base);
+            proTModel.addRow(row);
+        }
+        
+           /*EntityManager entity = login.conexion.createEntityManager(); 
+           List<BigDecimal> numeros = entity.createNativeQuery("select totalcosto from centrodecosto natural join prorrateo order by idbase, nomcentro;").getResultList();
+           List<String> columnas = entity.createNativeQuery("select distinct nomcentro from centrodecosto order by nomcentro;").getResultList();*/
+           
+          /*Object [] row = new Object[columnas.size()+2];
           int j=0;
           
-          for(Baseprorrateo b:baseCtrl.findBaseprorrateoEntities()){
+          /*for(Baseprorrateo b:baseCtrl.findBaseprorrateoEntities()){
               BigDecimal[] fila = new BigDecimal[columnas.size()];
               row[0] = b.getNombase();
               row[1] = b.getTotalbase();
@@ -59,8 +73,8 @@ public class Prorrateo extends javax.swing.JFrame {
               j++;
               datos.add(fila);
               proTModel.addRow(row);
-          }
-        jTable1.setEnabled(false);
+          }*/
+        
 
     }
 
@@ -181,15 +195,47 @@ public class Prorrateo extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Generar pdf de prorrateo
-        int i = 0;
-        for(Baseprorrateo b:bases){
-            //List<Cuenta> cuentas = b.getCuentaList();
-            BigDecimal[] coef = datos.get(i);
-            for (int j = 0; j < coef.length; j++) {
-                System.out.println(coef[j]);
+     
+        for (int i = 0; i < nomBases.size(); i++) {
+            Baseprorrateo baseActual = bases.get(i);
+            //Calculando los procentajes para el prorrateo
+            BigDecimal[] coefila = new BigDecimal[centros.size()];
+            for (int j = 0; j < coefila.length; j++) {
+                String temp = (String)jTable1.getValueAt(i, j+2);
+                BigDecimal p = BigDecimal.ZERO;
+                if(temp!=null){p = new BigDecimal(temp.replace(",", ""));}                
+                BigDecimal q = baseActual.getTotalbase();
+                coefila[j] = p.divide(q,2,BigDecimal.ROUND_HALF_UP);
             }
+            coef.add(coefila); //Se añaden a datos para ser mostrados luego
+            
+            //Multiplicando los totales de cada cuenta para prorratear           
+            //List<Cuenta> cuentas = baseActual.getCuentaList(); //Esto puede ser cambiado por una Query SQL que me devuelva los totales cuando la base sea igual al nombre        
+            
+            List<BigDecimal> cuentas = entity.createNativeQuery("select saldocuenta from cuenta where idbase = "+baseActual.getIdbase()+";").getResultList();
+            for(BigDecimal c:cuentas){
+                BigDecimal[] prorra = new BigDecimal[centros.size()];
+                for (int j = 0; j < prorra.length; j++) {
+                    prorra[j] = coefila[j].multiply(c/*.getSaldocuenta()*/);
+                }
+                datos.add(prorra);
+            }
+            //Fin prorrateo
             
         }
+        System.out.println("Prorrateo");
+        for(BigDecimal[] c : datos){
+            System.out.println("\nFila");
+            for (int i = 0; i < c.length; i++) {
+                System.out.println(c[i]);
+            }
+            System.out.println("Limit");
+        }
+
+        //Coeficientes en COEF
+        //Resultado del prorrateo en DATOS
+        
+       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

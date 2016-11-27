@@ -180,6 +180,39 @@ public class BaseprorrateoJpaController implements Serializable {
             }
         }
     }
+    
+    public void destroyByName(String nombre) throws NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Baseprorrateo baseprorrateo;
+            try {
+                baseprorrateo = (Baseprorrateo)em.createNamedQuery("Baseprorrateo.findByNombase").setParameter("nombase", nombre).getResultList().get(0);
+                baseprorrateo.getIdbase();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The baseprorrateo with nombre " + nombre + " no longer exists.", enfe);
+            }
+            List<Centrodecosto> centrodecostoList = baseprorrateo.getCentrodecostoList();
+            for (Centrodecosto centrodecostoListCentrodecosto : centrodecostoList) {
+                centrodecostoListCentrodecosto.getBaseprorrateoList().remove(baseprorrateo);
+                centrodecostoListCentrodecosto = em.merge(centrodecostoListCentrodecosto);
+            }
+            List<Cuenta> cuentaList = baseprorrateo.getCuentaList();
+            for (Cuenta cuentaListCuenta : cuentaList) {
+                cuentaListCuenta.setIdbase(null);
+                cuentaListCuenta = em.merge(cuentaListCuenta);
+            }
+            em.remove(baseprorrateo);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
+    
 
     public List<Baseprorrateo> findBaseprorrateoEntities() {
         return findBaseprorrateoEntities(true, -1, -1);
@@ -209,6 +242,15 @@ public class BaseprorrateoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             return em.find(Baseprorrateo.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Baseprorrateo findBaseprorrateoByName(String id) {
+        EntityManager em = getEntityManager();
+        try {
+            return (Baseprorrateo)em.createNamedQuery("Baseprorrateo.findByNombase").setParameter("nombase", id).getResultList().get(0);
         } finally {
             em.close();
         }

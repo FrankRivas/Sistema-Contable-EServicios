@@ -130,6 +130,32 @@ public class CentrodecostoJpaController implements Serializable {
             }
         }
     }
+    
+    public void destroyByName(String name) throws NonexistentEntityException {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Centrodecosto centrodecosto;
+            try {
+                centrodecosto = (Centrodecosto)em.createNamedQuery("Centrodecosto.findByNomcentro").setParameter("nomcentro", name).getResultList().get(0);
+                centrodecosto.getIdcentro();
+            } catch (EntityNotFoundException enfe) {
+                throw new NonexistentEntityException("The centrodecosto with nombre " + name + " no longer exists.", enfe);
+            }
+            List<Baseprorrateo> baseprorrateoList = centrodecosto.getBaseprorrateoList();
+            for (Baseprorrateo baseprorrateoListBaseprorrateo : baseprorrateoList) {
+                baseprorrateoListBaseprorrateo.getCentrodecostoList().remove(centrodecosto);
+                baseprorrateoListBaseprorrateo = em.merge(baseprorrateoListBaseprorrateo);
+            }
+            em.remove(centrodecosto);
+            em.getTransaction().commit();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public List<Centrodecosto> findCentrodecostoEntities() {
         return findCentrodecostoEntities(true, -1, -1);
@@ -159,6 +185,15 @@ public class CentrodecostoJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             return em.find(Centrodecosto.class, id);
+        } finally {
+            em.close();
+        }
+    }
+    
+    public Centrodecosto findCentrodecostoByName(String name) {
+        EntityManager em = getEntityManager();
+        try {
+            return (Centrodecosto)em.createNamedQuery("Centrodecosto.findByNomcentro").setParameter("nomcentro", name).getResultList().get(0);
         } finally {
             em.close();
         }

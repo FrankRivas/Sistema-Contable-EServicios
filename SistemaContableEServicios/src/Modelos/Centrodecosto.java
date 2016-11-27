@@ -6,6 +6,7 @@
 package Modelos;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -31,7 +32,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "Centrodecosto.findAll", query = "SELECT c FROM Centrodecosto c"),
     @NamedQuery(name = "Centrodecosto.findByIdcentro", query = "SELECT c FROM Centrodecosto c WHERE c.idcentro = :idcentro"),
-    @NamedQuery(name = "Centrodecosto.findByNomcentro", query = "SELECT c FROM Centrodecosto c WHERE c.nomcentro = :nomcentro")})
+    @NamedQuery(name = "Centrodecosto.findByNomcentro", query = "SELECT c FROM Centrodecosto c WHERE c.nomcentro = :nomcentro"),
+    @NamedQuery(name = "Centrodecosto.findByTotalcosto", query = "SELECT c FROM Centrodecosto c WHERE c.totalcosto = :totalcosto")})
 public class Centrodecosto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -46,7 +48,10 @@ public class Centrodecosto implements Serializable {
     @Basic(optional = false)
     @Column(name = "nomcentro")
     private String nomcentro;
-    
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @Column(name = "totalcosto")
+    private BigDecimal totalcosto;
     @ManyToMany(mappedBy = "centrodecostoList")
     private List<Baseprorrateo> baseprorrateoList;
 
@@ -57,15 +62,15 @@ public class Centrodecosto implements Serializable {
         this.idcentro = idcentro;
     }
     
-    public Centrodecosto(String nomcentro) {
+    public Centrodecosto(String nomcentro, BigDecimal totalcosto) {
         this.nomcentro = nomcentro;
-        
+        this.totalcosto = totalcosto;
     }
 
-    public Centrodecosto(Integer idcentro, String nomcentro) {
+    public Centrodecosto(Integer idcentro, String nomcentro, BigDecimal totalcosto) {
         this.idcentro = idcentro;
         this.nomcentro = nomcentro;
-        
+        this.totalcosto = totalcosto;
     }
 
     public Integer getIdcentro() {
@@ -82,6 +87,14 @@ public class Centrodecosto implements Serializable {
 
     public void setNomcentro(String nomcentro) {
         this.nomcentro = nomcentro;
+    }
+
+    public BigDecimal getTotalcosto() {
+        return totalcosto;
+    }
+
+    public void setTotalcosto(BigDecimal totalcosto) {
+        this.totalcosto = totalcosto;
     }
 
     @XmlTransient

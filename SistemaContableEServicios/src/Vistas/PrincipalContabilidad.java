@@ -72,7 +72,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     public void llenarComboBox() throws SQLException{
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","postgres","administrador");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
             String sql="SELECT distinct * FROM periodocontable";
             Statement stmnt=conexion.createStatement();
             ResultSet rs = stmnt.executeQuery(sql);

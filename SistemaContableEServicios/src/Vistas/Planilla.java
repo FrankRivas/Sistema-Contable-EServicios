@@ -7,8 +7,12 @@ package Vistas;
 
 import Controladores.EmpleadoJpaController;
 import Controladores.PuestoJpaController;
+import Controladores.TechoJpaController;
 import Modelos.Empleado;
 import Modelos.Puesto;
+import Modelos.Techo;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -23,12 +27,34 @@ public class Planilla extends javax.swing.JFrame {
     //DefaultTableModel plaModel = new DefaultTableModel();
     EmpleadoJpaController empCtrl = new EmpleadoJpaController(login.conexion);
     PuestoJpaController puestoCtrl = new PuestoJpaController(login.conexion);
+    
+    List<Empleado> empleados = empCtrl.findEmpleadoEntities();
+        
+    //Contadores para devolver al final
+     BigDecimal totalAdmin = BigDecimal.ZERO;
+     BigDecimal totalOtros = BigDecimal.ZERO;
+     BigDecimal totalAfp = BigDecimal.ZERO;
+     BigDecimal totalIsss = BigDecimal.ZERO;
+     BigDecimal totalRenta = BigDecimal.ZERO;
     /**
      * Creates new form Planilla
      */
     public Planilla() {
         initComponents();
+        DefaultTableModel act = (DefaultTableModel)jTable1.getModel();
         
+        Object[] rowData = new Object[13];
+        for(Empleado e:empleados){
+            rowData[0] = e.getCodempleado();
+            rowData[1] = e.getNomempleado()+" "+e.getApellido();
+            
+            Puesto p = e.getIdpuesto();
+            
+            rowData[2] = p.getNompuesto();
+            rowData[3] = p.getSalario();
+            act.addRow(rowData);
+        }
+        jTable1.setModel(act);
         
     }
 
@@ -47,6 +73,7 @@ public class Planilla extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,6 +103,13 @@ public class Planilla extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Calcular");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,13 +124,18 @@ public class Planilla extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(71, 71, 71)
-                .addComponent(jButton2)
-                .addGap(68, 68, 68))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton1)
+                                .addGap(71, 71, 71)
+                                .addComponent(jButton2)
+                                .addGap(68, 68, 68))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addGap(41, 41, 41))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -107,7 +146,9 @@ public class Planilla extends javax.swing.JFrame {
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(52, 52, 52)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -131,11 +172,129 @@ public class Planilla extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        PlanillaGenerada plan = new PlanillaGenerada();
+        PlanillaGenerada plan = new PlanillaGenerada(totalAdmin, totalOtros, totalAfp, totalIsss, totalRenta);
         plan.setVisible(true);
         plan.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // CALCULOS DE TODAS LAS RETENCIONES POR EMPLEADO
+        jTable1.setEnabled(false);
+        TechoJpaController techoCtrl = new TechoJpaController(login.conexion);
+        List<Techo> impuestos = techoCtrl.findTechoEntitiesOrdered();
+
+        BigDecimal horas = new BigDecimal("160.00");
+        
+        //Para cada empleado
+       
+        for (int i = 0; i < jTable1.getRowCount(); i++) { 
+            
+           BigDecimal salario = (BigDecimal)jTable1.getValueAt(i, 3);  //Salario normal
+           BigDecimal salhora = salario.divide(horas);    //Se calcula el salario por hora
+           
+           BigDecimal horaExtra = BigDecimal.ZERO;
+           String horEx = (String)jTable1.getValueAt(i, 4);
+           if(horEx!=null){horaExtra = new BigDecimal(horEx.replace(",",""));}  //Se determinan las horas extra
+           
+           BigDecimal subtotal = salhora.multiply(horaExtra).multiply(BigDecimal.valueOf(2.0)).round(MathContext.DECIMAL32);
+           subtotal = subtotal.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+           BigDecimal totalSal = salario.add(subtotal);    //Salario con horas extra
+           jTable1.setValueAt(totalSal, i, 5);  //Se asigna a la tabla
+           
+           //Calculo de impuestos
+           
+           //Calculo del AFP
+           BigDecimal afpCoef = impuestos.get(1).getPorcenaplicar();
+           BigDecimal afp = salario.multiply(afpCoef);
+           afp = afp.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+           jTable1.setValueAt(afp, i, 6);
+           totalAfp = afp.add(totalAfp);
+            
+           //Fin calculo AFP
+           
+           //Calculo del ISSS
+           BigDecimal isssCoef = impuestos.get(0).getPorcenaplicar();
+           BigDecimal desdeIsss = impuestos.get(0).getDesde();
+           BigDecimal isss = BigDecimal.ZERO;
+           
+           if(!(totalSal.compareTo(desdeIsss)==-1)){
+               isss = desdeIsss.multiply(isssCoef);
+           } else {
+               isss = totalSal.multiply(isssCoef);
+           }
+            
+           isss = isss.setScale(2, BigDecimal.ROUND_HALF_EVEN);
+           jTable1.setValueAt(isss, i, 7);
+           totalIsss = isss.add(totalIsss);
+           //Fin calculo ISSS
+           
+           //Calculo de la renta
+           BigDecimal renta = BigDecimal.ZERO;
+           
+           Techo primer = impuestos.get(2);
+           Techo segundo = impuestos.get(3);
+           Techo tercero = impuestos.get(4);
+           Techo cuarto = impuestos.get(5);
+           
+           if(totalSal.compareTo(primer.getDesde())==-1){
+               //Nada
+           } else {
+               if(totalSal.compareTo(segundo.getDesde())==-1){
+                   BigDecimal exceso = primer.getSobreexceso();
+                   BigDecimal coefIsr = primer.getPorcenaplicar();
+                   renta = coefIsr.multiply(totalSal.subtract(exceso));
+               } else {
+                   if(totalSal.compareTo(tercero.getDesde())==-1){
+                      BigDecimal exceso = segundo.getSobreexceso();
+                      BigDecimal coefIsr = segundo.getPorcenaplicar();
+                      renta = coefIsr.multiply(totalSal.subtract(exceso)); 
+                   } else{
+                       if(totalSal.compareTo(cuarto.getDesde())==-1){
+                           BigDecimal exceso = tercero.getSobreexceso();
+                           BigDecimal coefIsr = tercero.getPorcenaplicar();
+                           renta = coefIsr.multiply(totalSal.subtract(exceso)); 
+                       } else {
+                           BigDecimal exceso = cuarto.getSobreexceso();
+                           BigDecimal coefIsr = cuarto.getPorcenaplicar();
+                           renta = coefIsr.multiply(totalSal.subtract(exceso));
+                       }
+                   }
+               }
+           }
+           renta = renta.setScale(2, BigDecimal.ROUND_HALF_EVEN); //redondeando 
+           jTable1.setValueAt(renta, i, 8);
+           totalRenta = renta.add(totalRenta);
+           
+           //Fin calculo de la renta
+           
+           //Si existieran otros
+           BigDecimal otros = BigDecimal.ZERO;
+           String ot = (String)jTable1.getValueAt(i, 9);
+           if(ot!=null){otros = new BigDecimal(ot.replace(",", ""));}
+           //Fin del calculo de otroso
+           
+           //Fin del calculo de impuestos
+           
+           BigDecimal retenciones = afp.add(isss).add(renta).add(otros);        //isss+afp+renta+otros
+           jTable1.setValueAt(retenciones, i, 10);
+           
+           BigDecimal totalPagar = totalSal.subtract(retenciones);   //Total final a pagar a empleado
+           jTable1.setValueAt(totalPagar, i, 11);
+           
+            String puesto = (String)jTable1.getValueAt(i, 2);
+            if(puesto.compareTo("Administrador")==0 || puesto.compareTo("Contador")==0){
+                totalAdmin = totalPagar.add(totalAdmin);
+            } else {
+                totalOtros = totalPagar.add(totalOtros);
+            }
+            
+            //Fin del calculo
+           
+           
+        }
+        jTable1.setEnabled(true);
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -175,6 +334,7 @@ public class Planilla extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;

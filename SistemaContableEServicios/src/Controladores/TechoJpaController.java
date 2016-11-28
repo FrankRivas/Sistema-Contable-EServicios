@@ -142,6 +142,15 @@ public class TechoJpaController implements Serializable {
             em.close();
         }
     }
+    
+    public List<Techo> findTechoEntitiesOrdered(){
+        EntityManager em = getEntityManager();
+        try {
+            return (List<Techo>) em.createNamedQuery("Techo.findAll").getResultList();
+        } finally {
+            em.close();
+        }
+    }
 
     public Techo findTecho(Integer id) {
         EntityManager em = getEntityManager();

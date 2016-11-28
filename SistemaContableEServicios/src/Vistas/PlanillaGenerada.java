@@ -5,6 +5,18 @@
  */
 package Vistas;
 
+import Controladores.CuentaJpaController;
+import Controladores.DiarioControl;
+import Modelos.Detallediario;
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Merii
@@ -13,8 +25,34 @@ public class PlanillaGenerada extends javax.swing.JFrame {
 
     /**
      * Creates new form PlanillaGenerada
+     * @param totalAdmin
+     * @param totalOtros
+     * @param totalAfp
+     * @param totalIsss
+     * @param totalRenta
      */
-    public PlanillaGenerada() {
+    public PlanillaGenerada(BigDecimal totalAdmin, BigDecimal totalOtros, BigDecimal totalAfp, BigDecimal totalIsss, BigDecimal totalRenta) {
+        initComponents();
+        
+        jTable1.setValueAt(totalAdmin, 0, 2);
+        jTable1.setValueAt(BigDecimal.ZERO, 0, 3);
+        jTable1.setValueAt(totalOtros, 1, 2);
+        jTable1.setValueAt(BigDecimal.ZERO, 1, 3);
+        jTable1.setValueAt(totalIsss, 3, 3);
+        jTable1.setValueAt(BigDecimal.ZERO, 3, 2);
+        jTable1.setValueAt(totalAfp, 4, 3);
+        jTable1.setValueAt(BigDecimal.ZERO, 4, 2);
+        jTable1.setValueAt(totalRenta, 5, 3);
+        jTable1.setValueAt(BigDecimal.ZERO, 5, 2);
+        BigDecimal bancos = totalAdmin.add(totalOtros).subtract(totalIsss).subtract(totalAfp).subtract(totalRenta);
+        jTable1.setValueAt(bancos, 2, 3);
+        jTable1.setValueAt(BigDecimal.ZERO, 2, 2);
+        jTable1.setEnabled(false);
+        
+        
+    }
+
+    private PlanillaGenerada() {
         initComponents();
     }
 
@@ -45,16 +83,12 @@ public class PlanillaGenerada extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "Gastos de Venta y Distribucion", null, null},
-                {null, "Sueldos", null, null},
-                {null, "Gastos de Administracion", null, null},
-                {null, "Sueldos", null, null},
-                {null, "Efectivo y Equivalentes", null, null},
-                {null, "Bancos", null, null},
-                {null, "Retenciones y Descuentos", null, null},
-                {null, "ISSS", null, null},
-                {null, "AFP", null, null},
-                {null, "ISR", null, null}
+                {"430101", "Sueldos y Salarios", null, null},
+                {"420101", "Sueldos y Salarios", null, null},
+                {"110103", "Efectivo en Bancos", null, null},
+                {"420105", "Cuenta Patronal ISSS", null, null},
+                {"420106", "Cuenta Patronal AFP", null, null},
+                {"21050103", "Pago a Cuenta e ISR x Pagar", null, null}
             },
             new String [] {
                 "Codigo", "Nombre", "Debe ", "Haber"
@@ -144,6 +178,53 @@ public class PlanillaGenerada extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        CuentaJpaController cuentaControl=new CuentaJpaController(login.conexion);
+        List<Detallediario> detalles = new ArrayList<Detallediario>();
+        
+        for (int i = 0; i < 6; i++) {
+            Detallediario detalle = new Detallediario();
+            String codCuenta = (String)jTable1.getValueAt(i, 0);
+            detalle.setCodcuenta(cuentaControl.findCuenta(codCuenta));
+            BigDecimal debe = (BigDecimal)jTable1.getValueAt(i, 2);
+            detalle.setDebe(debe);
+            BigDecimal haber = (BigDecimal)jTable1.getValueAt(i, 3);
+            detalle.setHaber(haber);
+            detalles.add(detalle);
+        }
+        
+                if(DiarioControl.validarDetallesDiarios(detalles)){
+                if(DiarioControl.validarPartidaDoble(detalles)){
+                    if(!jTextArea1.getText().isEmpty()){
+                        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        try{
+                            Date fecha = format.parse(jTextField1.getText());
+                            if(DiarioControl.nuevoDiario(detalles, fecha, jTextArea1.getText())){
+                                JOptionPane.showMessageDialog(this, "Creación del Diario con éxito");
+                                jTextArea1.setText("");
+                                detalles.clear();
+                                DefaultTableModel model = (DefaultTableModel)jTable1.getModel();
+                                int rows = model.getRowCount(); 
+                                for(int i = rows - 1; i >=0; i--)
+                                {
+                                    model.removeRow(i); 
+                                }
+                                jTable1.setModel(model);
+                            }else{
+                                JOptionPane.showMessageDialog(this, "Error en la creación del diario!");
+                            }
+                        }catch(Exception e){
+                        JOptionPane.showMessageDialog(this, "Error en los datos de la fecha, recordar que el formato de la fecha es dd/mm/aaaa");
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(this, "Por favor especifique el Concepto del Diario, antes de Guardarlo.");
+                    }
+                
+                }else{
+                    JOptionPane.showMessageDialog(this, "No se cumple Partida Doble, revisar datos en transacciones.");
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Error en las transacciones. Recuerde que no dejar el debe y el haber de alguna transaccion a 0.0");
+            }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

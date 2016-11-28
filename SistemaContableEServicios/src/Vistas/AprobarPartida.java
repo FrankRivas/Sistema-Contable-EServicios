@@ -15,8 +15,11 @@ import Modelos.Detallediario;
 import Modelos.Diario;
 import Modelos.DiarioTableModel;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
@@ -281,9 +284,15 @@ public class AprobarPartida extends javax.swing.JFrame {
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
         // TODO add your handling code here:
-        PrincipalContabilidad prin = new PrincipalContabilidad();
-        prin.setVisible(true);
-        prin.setLocationRelativeTo(null);
+        PrincipalContabilidad prin;
+        try {
+            prin = new PrincipalContabilidad();
+            prin.setVisible(true);
+            prin.setLocationRelativeTo(null);
+        } catch (SQLException ex) {
+            Logger.getLogger(AprobarPartida.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         this.setVisible(false);
     }//GEN-LAST:event_btnRegresarActionPerformed
 

@@ -5,17 +5,28 @@
  */
 package Vistas;
 
+import Controladores.EmpleadoJpaController;
+import Controladores.PuestoJpaController;
+import Modelos.Empleado;
+import Modelos.Puesto;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Merii
  */
 public class Planilla extends javax.swing.JFrame {
-
+    //DefaultTableModel plaModel = new DefaultTableModel();
+    EmpleadoJpaController empCtrl = new EmpleadoJpaController(login.conexion);
+    PuestoJpaController puestoCtrl = new PuestoJpaController(login.conexion);
     /**
      * Creates new form Planilla
      */
     public Planilla() {
         initComponents();
+        
+        
     }
 
     /**
@@ -38,10 +49,7 @@ public class Planilla extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "No.", "Nombre", "Puesto", "Sueldo Basico", "Horas Extra", "Total", "AFP", "ISSS", "Renta", "Otros", "Retenciones", "Total a Pagar"

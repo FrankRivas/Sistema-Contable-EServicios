@@ -3,19 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Merii/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/Prorrateo.java</file>
-=======
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Modelos/Baseprorrateo.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Modelos/Centrodecosto.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/CentrodecostoJpaController.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/BaseprorrateoJpaController.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/Prorrateo.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/GestionarTiposCuentas.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/TipoCuentaControl.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/CatalogoCuentas.java</file>
-            <file>file:/C:/Users/Benjamín/Documents/GitHub/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/BasesyCentros.java</file>
->>>>>>> origin/master
+            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/Planilla.java</file>
+            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/RentaControl.java</file>
+            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/CatalogoCuentas.java</file>
+            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/BaseprorrateoJpaController.java</file>
+            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/BasesyCentros.java</file>
         </group>
     </open-files>
 </project-private>

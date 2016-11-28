@@ -392,7 +392,7 @@ public class BasesyCentros extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)))
                 .addContainerGap())
         );
@@ -594,6 +594,7 @@ public class BasesyCentros extends javax.swing.JFrame {
         
         try {
             costoCtrl.create(centro);
+
             DefaultTableModel actualizacion = (DefaultTableModel)jTable2.getModel();
             Object[] row = new Object[1];
             
@@ -603,11 +604,12 @@ public class BasesyCentros extends javax.swing.JFrame {
             jTable2.setModel(actualizacion); 
         } catch (Exception e) {
            JOptionPane.showMessageDialog(null,"Error al guardar centro de costo"); 
-        }
+        } 
 
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
         // Codigo para elminar un centro de costo
         
         int val = jTable2.getSelectedRow();

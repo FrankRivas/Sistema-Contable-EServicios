@@ -7,6 +7,9 @@ package Vistas;
 
 import Controladores.EmpleadoControl;
 import Modelos.EmpleadoTableModel;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -190,11 +193,15 @@ public class PrincipalEmpleados extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
-        con.setVisible(true);
-        con.setLocationRelativeTo(null);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            PrincipalContabilidad con = new PrincipalContabilidad();
+            con.setVisible(true);
+            con.setLocationRelativeTo(null);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(PrincipalEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**

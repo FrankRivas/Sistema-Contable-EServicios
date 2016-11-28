@@ -1,0 +1,13 @@
+SELECT codcuenta, nomcuenta, 
+CASE
+    WHEN saldocuenta>=0 THEN saldocuenta
+    ELSE 0
+  END 
+  AS debe, 
+   CASE
+    WHEN saldocuenta<0 THEN -saldocuenta
+    ELSE 0
+  END 
+  AS haber
+from cuenta
+where (idtipocuenta like '4%' or idtipocuenta like '5%') and saldocuenta!=0

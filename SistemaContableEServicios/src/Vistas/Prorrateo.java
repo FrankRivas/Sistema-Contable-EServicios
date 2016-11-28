@@ -11,8 +11,11 @@ import Modelos.Baseprorrateo;
 import Modelos.Centrodecosto;
 import Modelos.Cuenta;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.table.DefaultTableModel; 
@@ -248,7 +251,12 @@ public class Prorrateo extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
+        PrincipalContabilidad con = null;
+        try {
+            con = new PrincipalContabilidad();
+        } catch (SQLException ex) {
+            Logger.getLogger(Prorrateo.class.getName()).log(Level.SEVERE, null, ex);
+        }
         con.setVisible(true);
         con.setLocationRelativeTo(null);
         this.setVisible(false);

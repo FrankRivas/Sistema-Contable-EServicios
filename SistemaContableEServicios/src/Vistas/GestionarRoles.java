@@ -11,8 +11,11 @@ import Controladores.RolJpaController;
 import Modelos.Rol;
 import Modelos.RolTableModel;
 import static java.lang.Integer.parseInt;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -238,11 +241,15 @@ public class GestionarRoles extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
-        con.setVisible(true);
-        con.setLocationRelativeTo(null);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            PrincipalContabilidad con = new PrincipalContabilidad();
+            con.setVisible(true);
+            con.setLocationRelativeTo(null);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionarRoles.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed

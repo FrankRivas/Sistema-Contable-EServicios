@@ -1,0 +1,10 @@
+SELECT dd.codcuenta, cu.nomcuenta, sum(dd.debe) as Deudor, sum(dd.haber) as Acreedor, pc.fechaFin
+FROM detallediario dd
+INNER JOIN diario d
+ON dd.idregistro= d.idregistro
+INNER JOIN cuenta cu
+ON dd.codcuenta= cu.codcuenta
+INNER JOIN PeriodoContable pc
+ON d.idPeriodo=pc.idPeriodo
+WHERE d.idperiodo=1 and not((dd.debe=0) and (dd.haber=0))
+group by dd.codcuenta, cu.nomcuenta, pc.idPeriodo

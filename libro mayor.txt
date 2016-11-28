@@ -1,0 +1,16 @@
+SELECT
+     cuenta."codcuenta" AS cuenta_codcuenta,
+     cuenta."nomcuenta" AS cuenta_nomcuenta,
+     
+     CASE
+    WHEN saldocuenta>=0 THEN saldocuenta
+    ELSE 0
+  END 
+  AS debe, 
+   CASE
+    WHEN saldocuenta<0   THEN -saldocuenta
+    ELSE 0
+  END 
+  AS haber
+ from cuenta
+where saldocuenta!=0 and cue_codcuenta is null;

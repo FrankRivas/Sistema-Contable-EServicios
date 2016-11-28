@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="eda76e7c-3f36-44dc-a87b-fe4bc51d5828">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#EFF7FF"/>
+		</conditionalStyle>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#EFF7FF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="LM" uuid="1f6c38a2-3b50-4db6-b5ed-d1f69920eacf">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     cuenta."codcuenta" AS cuenta_codcuenta,
+     cuenta."nomcuenta" AS cuenta_nomcuenta,
+     
+     CASE
+    WHEN saldocuenta>=0 THEN saldocuenta
+    ELSE 0
+  END 
+  AS debe, 
+   CASE
+    WHEN saldocuenta<0   THEN -saldocuenta
+    ELSE 0
+  END 
+  AS haber
+ from cuenta
+where saldocuenta!=0 and cue_codcuenta is null;]]>
+		</queryString>
+		<field name="cuenta_codcuenta" class="java.lang.String"/>
+		<field name="cuenta_nomcuenta" class="java.lang.String"/>
+		<field name="debe" class="java.math.BigDecimal"/>
+		<field name="haber" class="java.math.BigDecimal"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT
+     cuenta."codcuenta" AS cuenta_codcuenta,
+     cuenta."nomcuenta" AS cuenta_nomcuenta,
+     
+     CASE
+    WHEN saldocuenta>=0 THEN saldocuenta
+    ELSE 0
+  END 
+  AS debe, 
+   CASE
+    WHEN saldocuenta<0   THEN -saldocuenta
+    ELSE 0
+  END 
+  AS haber
+ from cuenta
+where saldocuenta!=0 and cue_codcuenta is null;]]>
+	</queryString>
+	<field name="cuenta_codcuenta" class="java.lang.String"/>
+	<field name="cuenta_nomcuenta" class="java.lang.String"/>
+	<field name="debe" class="java.math.BigDecimal"/>
+	<field name="haber" class="java.math.BigDecimal"/>
+	<variable name="debe_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{debe}]]></variableExpression>
+	</variable>
+	<variable name="haber_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{haber}]]></variableExpression>
+	</variable>
+	<variable name="debe_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{debe}]]></variableExpression>
+	</variable>
+	<variable name="variable1" class="java.lang.String">
+		<variableExpression><![CDATA[$V{debe_1}.add($V{haber_1})]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="175" y="33" width="95" height="21" uuid="eb3440a0-1aa8-4000-af18-1b1fafaec255"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[LIBRO MAYOR AL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="102" y="0" width="376" height="32" uuid="0f1855bc-4ea0-4168-9666-9b5874258ebe"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[UDP AGENCIA MULTISERVICIOS]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="270" y="33" width="161" height="20" uuid="2572c30d-7e1f-4920-9b46-6b86bec50ac9"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="174" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" x="34" y="0" width="521" height="171" uuid="acb71dc3-fc3e-442b-8808-f5bc51de72fd"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="LM" uuid="d5ca0c56-cf78-4131-b083-4311ea6448c4">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="c9724a1a-1569-4b99-8e4e-d2e2eeee8da0">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="83cb12dc-2af9-438a-be64-56c4b9cb9c63"/>
+								<text><![CDATA[Cuenta]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="eae360d1-70f5-4563-9e46-f20c8679fc2a"/>
+								<textFieldExpression><![CDATA[$F{cuenta_codcuenta}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="156" uuid="38b6f07c-2936-4c1c-b3c4-cad3b0c8261b">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="6006a969-3906-4ef5-b621-da68b1ef5bbe"/>
+								<text><![CDATA[Nombre]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="156" height="30" uuid="ebbe349e-6c6c-4fad-8a79-5fef184d82cc"/>
+								<textFieldExpression><![CDATA[$F{debe}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="ac299803-138a-4532-aec3-6c8bc00c01ca"/>
+								<textFieldExpression><![CDATA[$F{cuenta_nomcuenta}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="1ffff7cf-b17c-4066-9fae-dd9894b8342b">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="69e39187-e216-4255-b4d5-bf9deaacc128"/>
+								<text><![CDATA[Debe]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="81ac013f-5f72-4901-8cad-2b124f735d5f"/>
+								<textFieldExpression><![CDATA[$F{debe}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="f86299d6-a6a0-4583-bcce-5413fd2c1619">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="95bcef64-5bfc-49ca-8696-3430389c91f3"/>
+								<text><![CDATA[Haber]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="f103daa0-a817-4c88-ac87-3205a0edbfc0"/>
+								<textFieldExpression><![CDATA[$F{haber}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="4" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="3" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="3" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="31" splitType="Stretch">
+			<textField>
+				<reportElement x="284" y="10" width="100" height="20" uuid="2149dc66-36b5-4591-84cc-55fb765f15eb"/>
+				<textFieldExpression><![CDATA[$V{debe_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="411" y="10" width="100" height="20" uuid="33733321-d632-4cf4-b502-436936f997c5"/>
+				<textFieldExpression><![CDATA[$V{haber_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="34" y="10" width="100" height="20" uuid="e94b3195-081b-49d0-a6b0-d7c21c2c01aa"/>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="10" width="511" height="1" uuid="1ef1d0ea-274e-4e79-9180-d1f866fa2800"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

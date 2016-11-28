@@ -7,6 +7,7 @@ package Vistas;
 import Controladores.LoginControl;
 import Controladores.UsuarioJpaController;
 import Modelos.Usuario;
+import java.sql.SQLException;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
@@ -14,6 +15,8 @@ import javax.swing.UIManager;
 import javax.swing.SwingUtilities;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -151,7 +154,12 @@ public static EntityManagerFactory conexion = Persistence.createEntityManagerFac
        String contra = txtContra.getText();
        
        if(LoginControl.validar(nombre, contra)){
-           PrincipalContabilidad conta=new PrincipalContabilidad();
+           PrincipalContabilidad conta = null;
+           try {
+               conta = new PrincipalContabilidad();
+           } catch (SQLException ex) {
+               Logger.getLogger(login.class.getName()).log(Level.SEVERE, null, ex);
+           }
            conta.setVisible(true);
            conta.setLocationRelativeTo(null);
            this.setVisible(false);

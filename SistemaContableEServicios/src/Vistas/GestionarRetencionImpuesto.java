@@ -5,23 +5,17 @@
  */
 package Vistas;
 
-import Controladores.RentaControl;
-import Modelos.RentaTableModel;
-
 /**
  *
  * @author Merii
  */
 public class GestionarRetencionImpuesto extends javax.swing.JFrame {
-    
-    public static RentaTableModel rentaTModel = new RentaTableModel();
+
     /**
      * Creates new form GestionarRetencionImpuesto
      */
     public GestionarRetencionImpuesto() {
         initComponents();
-        RentaControl.inicializarColumnas();
-        RentaControl.consultaInicial();
     }
 
     /**
@@ -48,7 +42,7 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
         jSeparator3 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tablaRentas = new javax.swing.JTable();
+        jTable2 = new javax.swing.JTable();
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -136,8 +130,18 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
 
         jLabel2.setText("Porcentajes Aplicados");
 
-        tablaRentas.setModel(rentaTModel);
-        jScrollPane2.setViewportView(tablaRentas);
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Identificador", "Retencion", "Desde", "Hasta", "Porcentaje", "Sobre Exceso", "Cuota Fija"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
 
         jLabel4.setText("ISR");
 
@@ -439,6 +443,7 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
@@ -447,6 +452,5 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
-    public static javax.swing.JTable tablaRentas;
     // End of variables declaration//GEN-END:variables
 }

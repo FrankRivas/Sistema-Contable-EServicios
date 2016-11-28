@@ -421,7 +421,9 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salirActionPerformed
-        System.exit(0);
+        this.setVisible(false);
+        login log=new login();
+        log.setVisible(true);
     }//GEN-LAST:event_salirActionPerformed
 
     private void catalogoCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_catalogoCuentasActionPerformed

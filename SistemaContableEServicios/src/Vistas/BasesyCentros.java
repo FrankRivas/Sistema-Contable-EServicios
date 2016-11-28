@@ -579,6 +579,8 @@ public class BasesyCentros extends javax.swing.JFrame {
             bases.add(baseNueva);
             centro.setBaseprorrateoList(bases);
             costoCtrl.create(centro);
+            jTable2.removeAll();
+            jTable2.updateUI();
             JOptionPane.showMessageDialog(null,"Centro Creado con Exito");
             jTable2.updateUI();
         } catch (Exception e) {
@@ -586,6 +588,8 @@ public class BasesyCentros extends javax.swing.JFrame {
             cen.getBaseprorrateoList().add(baseNueva);
             try {
                 costoCtrl.edit(cen);
+                jTable2.removeAll();
+                jTable2.updateUI();
                 JOptionPane.showMessageDialog(null, "Centro de Costo Modificado con Exito");
                 jTable2.updateUI();
             } catch (Exception ex) {
@@ -608,7 +612,7 @@ public class BasesyCentros extends javax.swing.JFrame {
         int indDel = -1;
         for(Baseprorrateo b:bases){
             System.out.println("Iterando");
-            if(b.getNombase().compareTo(nomBase)==0){
+            if(b.getNombase().compareTo(nomBase)==0){ 
                 indDel = bases.indexOf(b);  
             }
         }

@@ -612,7 +612,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         // TODO add your handling code here:}
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","postgres","administrador");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
             String archivo="src\\BalanceCompMensual.jasper"; 
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
              Map parametro = new HashMap();
@@ -635,7 +635,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","postgres","administrador");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
             String archivo="src\\BalanceCompAcum.jasper"; 
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
             JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
@@ -656,7 +656,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","postgres","administrador");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
             String archivo="src\\BalanceCuentasSubcuentas.jasper"; 
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
             JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
@@ -677,7 +677,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","postgres","administrador");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
             String archivo="src\\Libro Mayor.jasper"; 
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
             JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
@@ -698,7 +698,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","postgres","administrador");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
             String archivo="src\\BalanceGeneral.jasper"; 
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
             JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
@@ -719,7 +719,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","postgres","administrador");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
             String archivo="src\\EstadoResultado.jasper"; 
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
             JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);

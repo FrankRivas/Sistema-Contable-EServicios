@@ -7,6 +7,7 @@ package Controladores;
 
 import Modelos.Empleado;
 import Modelos.Puesto;
+import Modelos.Usuario;
 import static Vistas.PrincipalEmpleados.empleadoTModel;
 import static Vistas.PrincipalEmpleados.tablaEmpleados;
 import Vistas.login;
@@ -108,6 +109,33 @@ public class EmpleadoControl {
     }
     
     return resultado;
+    }
+    public static boolean borrar(int id){
+    boolean resultado = true;
+    EmpleadoJpaController empleadoControl = new EmpleadoJpaController(login.conexion);
+    UsuarioJpaController usuarioControl=new UsuarioJpaController(login.conexion);
+    List <Usuario> listaUsuarios=new ArrayList<Usuario>();    
+    listaUsuarios=usuarioControl.findUsuarioEntities();
+    boolean eliminarUsuario=false;
+    int idUsuario=-1;
+    for (Usuario user:listaUsuarios){
+        if(user.getCodempleado().getCodempleado()==id){
+            eliminarUsuario=true;
+             idUsuario=user.getIdusuario();
+        }
+             
+    }
+    try{
+        if(eliminarUsuario)
+            usuarioControl.destroy(idUsuario);
+        empleadoControl.destroy(id);   
+    }catch(Exception e){
+        System.out.print(e);
+        resultado = false;
+        return resultado;
+        }
+    return resultado;
+    
     }
     
 }

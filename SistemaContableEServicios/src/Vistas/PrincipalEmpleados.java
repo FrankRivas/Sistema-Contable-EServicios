@@ -6,7 +6,12 @@
 package Vistas;
 
 import Controladores.EmpleadoControl;
+import Modelos.Empleado;
 import Modelos.EmpleadoTableModel;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -64,6 +69,11 @@ public class PrincipalEmpleados extends javax.swing.JFrame {
         });
 
         jButton2.setText("Eliminar Empleado");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Modificar Información");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -190,12 +200,33 @@ public class PrincipalEmpleados extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
-        con.setVisible(true);
-        con.setLocationRelativeTo(null);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            PrincipalContabilidad con = new PrincipalContabilidad();
+            con.setVisible(true);
+            con.setLocationRelativeTo(null);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(PrincipalEmpleados.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        try{
+            int val = tablaEmpleados.getSelectedRow();
+            Empleado empleado = empleadoTModel.empleados.get(val);
+            if(EmpleadoControl.borrar(empleado.getCodempleado())){
+                JOptionPane.showMessageDialog(null, "Empleado Eliminado con Exito");
+                EmpleadoControl.consultaInicial();
+            }else{
+                JOptionPane.showMessageDialog(null, "No se pudo Eliminar el Empleado"); 
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Por favor seleccione el Empleado que desea eliminar"); 
+        }
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments

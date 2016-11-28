@@ -18,6 +18,7 @@ import Modelos.Cuenta;
 import Modelos.CuentaTableModel;
 import Modelos.Tipocuenta;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -377,11 +378,15 @@ public class CatalogoCuentas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-        // TODO add your handling code here:
-        PrincipalContabilidad conta = new PrincipalContabilidad();
-        conta.setVisible(true);
-        conta.setLocationRelativeTo(null);
-        this.dispose();
+        try {
+            // TODO add your handling code here:
+            PrincipalContabilidad conta = new PrincipalContabilidad();
+            conta.setVisible(true);
+            conta.setLocationRelativeTo(null);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(CatalogoCuentas.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnRegresarActionPerformed
 
     private void cboxEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboxEstadoActionPerformed

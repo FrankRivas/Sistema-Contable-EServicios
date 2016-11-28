@@ -11,10 +11,17 @@ import Modelos.Cuenta;
 import Modelos.DetalleDiarioTableModel;
 import Modelos.Detallediario;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -24,6 +31,12 @@ import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.text.MaskFormatter;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -37,7 +50,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     /**
      * Creates new form PrincipalContabilidad
      */
-    public PrincipalContabilidad() {
+    public PrincipalContabilidad() throws SQLException {
         initComponents();
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -52,9 +65,29 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
         Date now = new Date();
         txtFecha.setText(sdfDate.format(now));
-        
+        llenarComboBox();
         
     }
+    
+    public void llenarComboBox() throws SQLException{
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
+            String sql="SELECT distinct * FROM periodocontable";
+            Statement stmnt=conexion.createStatement();
+            ResultSet rs = stmnt.executeQuery(sql);
+            while(rs.next()){
+            int x=  Integer.parseInt(rs.getObject(1).toString());
+                System.out.println(x);
+            jComboBox1.addItem(rs.getObject(3));
+            jComboBox1.setSelectedIndex(x-1);
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PrincipalContabilidad.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+    }
+    
     private void inicializarColumnas(){
         TableColumnModel tColumnModel=new DefaultTableColumnModel();
         for(int i=0; i<4;i++){
@@ -94,6 +127,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         btnAceptar = new javax.swing.JButton();
         btnAgregarTransac = new javax.swing.JButton();
         txtFecha = new javax.swing.JTextField();
+        jComboBox1 = new javax.swing.JComboBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         catalogoCuentas = new javax.swing.JMenuItem();
@@ -125,15 +159,15 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         manual = new javax.swing.JMenuItem();
         salir = new javax.swing.JMenuItem();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(102, 102, 102));
 
         tablaDetalleDiario.setModel(detalleDTModel);
         tablaDetalleDiario.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 tablaDetalleDiarioInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         jScrollPane2.setViewportView(tablaDetalleDiario);
@@ -199,6 +233,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         Consultas.setText("Consultas");
 
         cuentasContables.setText("Cuentas Contables");
+        cuentasContables.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cuentasContablesActionPerformed(evt);
+            }
+        });
         Consultas.add(cuentasContables);
 
         partidasContables.setText("Partidas Contables");
@@ -214,15 +253,35 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         Reportes.setText("Reportes");
 
         balanzaMensual.setText("Balanza de Comprobación mensual");
+        balanzaMensual.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                balanzaMensualActionPerformed(evt);
+            }
+        });
         Reportes.add(balanzaMensual);
 
         balanzaAcumulada.setText("Balanza de Comprobación acumulada");
+        balanzaAcumulada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                balanzaAcumuladaActionPerformed(evt);
+            }
+        });
         Reportes.add(balanzaAcumulada);
 
         balanceGeneral.setText("Balance General");
+        balanceGeneral.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                balanceGeneralActionPerformed(evt);
+            }
+        });
         Reportes.add(balanceGeneral);
 
         estadoResultados.setText("Estados de Resultados");
+        estadoResultados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                estadoResultadosActionPerformed(evt);
+            }
+        });
         Reportes.add(estadoResultados);
 
         libroDiario.setText("Libro Diario");
@@ -234,9 +293,19 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         Reportes.add(libroDiario);
 
         libroDiarioMayor.setText("Libro Diario Mayor");
+        libroDiarioMayor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                libroDiarioMayorActionPerformed(evt);
+            }
+        });
         Reportes.add(libroDiarioMayor);
 
         libroMayor.setText("Libro Mayor");
+        libroMayor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                libroMayorActionPerformed(evt);
+            }
+        });
         Reportes.add(libroMayor);
 
         jMenuBar1.add(Reportes);
@@ -337,6 +406,8 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAgregarTransac))
                     .addGroup(layout.createSequentialGroup()
@@ -356,10 +427,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(51, 51, 51)
+                        .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAgregarTransac)))
@@ -374,7 +446,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(289, 289, 289)
                         .addComponent(btnAceptar)))
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -531,6 +603,138 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         aprobarP.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_partidasContablesActionPerformed
+
+    private void cuentasContablesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cuentasContablesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cuentasContablesActionPerformed
+
+    private void balanzaMensualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanzaMensualActionPerformed
+        // TODO add your handling code here:}
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
+            String archivo="src\\BalanceCompMensual.jasper"; 
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
+             Map parametro = new HashMap();
+            parametro.put("PeriodoContable",jComboBox1.getSelectedIndex()+1);
+            JasperPrint jprint= JasperFillManager.fillReport(reporte, parametro, conexion);
+            JasperViewer viewReport= new JasperViewer(jprint, false);
+            viewReport.setTitle("Balance de comprobacion "+ jComboBox1.getSelectedItem());
+            viewReport.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, ex);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_balanzaMensualActionPerformed
+
+    private void balanzaAcumuladaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanzaAcumuladaActionPerformed
+        // TODO add your handling code here:
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
+            String archivo="src\\BalanceCompAcum.jasper"; 
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
+            JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
+            JasperViewer viewReport= new JasperViewer(jprint, false);
+            viewReport.setTitle("Balance de comprobacion ");
+            viewReport.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, ex);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_balanzaAcumuladaActionPerformed
+
+    private void libroDiarioMayorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libroDiarioMayorActionPerformed
+        // TODO add your handling code here:
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
+            String archivo="src\\BalanceCuentasSubcuentas.jasper"; 
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
+            JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
+            JasperViewer viewReport= new JasperViewer(jprint, false);
+            viewReport.setTitle("Balance de comprobacion ");
+            viewReport.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, ex);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_libroDiarioMayorActionPerformed
+
+    private void libroMayorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_libroMayorActionPerformed
+        // TODO add your handling code here:
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
+            String archivo="src\\Libro Mayor.jasper"; 
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
+            JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
+            JasperViewer viewReport= new JasperViewer(jprint, false);
+            viewReport.setTitle("Balance de comprobacion ");
+            viewReport.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, ex);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_libroMayorActionPerformed
+
+    private void balanceGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanceGeneralActionPerformed
+        // TODO add your handling code here:
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
+            String archivo="src\\BalanceGeneral.jasper"; 
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
+            JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
+            JasperViewer viewReport= new JasperViewer(jprint, false);
+            viewReport.setTitle("Balance de comprobacion ");
+            viewReport.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, ex);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_balanceGeneralActionPerformed
+
+    private void estadoResultadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estadoResultadosActionPerformed
+        // TODO add your handling code here:
+        try {
+            Class.forName("org.postgresql.Driver");
+            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
+            String archivo="src\\EstadoResultado.jasper"; 
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
+            JasperPrint jprint= JasperFillManager.fillReport(reporte, null, conexion);
+            JasperViewer viewReport= new JasperViewer(jprint, false);
+            viewReport.setTitle("Balance de comprobacion ");
+            viewReport.setVisible(true);
+            
+        } catch (ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, ex);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }//GEN-LAST:event_estadoResultadosActionPerformed
     
     public void agregarDetalle(){
         if(codCuentaSeleccionada!=""){
@@ -582,7 +786,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PrincipalContabilidad().setVisible(true);
+                try {
+                    new PrincipalContabilidad().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(PrincipalContabilidad.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -601,6 +809,7 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private javax.swing.JMenuItem cuentasContables;
     private javax.swing.JMenuItem estadoResultados;
     private javax.swing.JMenuItem issss;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;

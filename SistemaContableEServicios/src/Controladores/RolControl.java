@@ -8,6 +8,7 @@ package Controladores;
 import Modelos.Cuenta;
 import Modelos.Rol;
 import Modelos.RolTableModel;
+import Modelos.Usuario;
 //import static Vistas.GestionarRoles.rolTModel;
 import static Vistas.GestionarRoles.tablaRoles;
 import Vistas.login;
@@ -103,17 +104,30 @@ public class RolControl {
     return resultado;
     }
     
-    public static boolean borrar(int id){
-    boolean resultado = true;
+    public static int borrar(int id){
+    int resultado = 0;
     RolJpaController rolControl = new RolJpaController(login.conexion);
-  
-    try{
-    rolControl.destroy(id);
-    }catch(Exception e){
-    System.out.print(e);
-    resultado = false;
-    return resultado;
+    UsuarioJpaController usuarioControl=new UsuarioJpaController(login.conexion);
+    List <Usuario> listaUsuarios=new ArrayList<Usuario>();    
+    listaUsuarios=usuarioControl.findUsuarioEntities();
+    boolean eliminable=true;
+    for (Usuario user:listaUsuarios){
+        if(user.getIdrol().getIdrol()==id){
+            eliminable=false; //Hay al menos un usuario asociado a este rol y no se debería eliminar el rol.
+        }
     }
+    if(eliminable==true){
+        try{
+            rolControl.destroy(id);
+        }catch(Exception e){
+            System.out.print(e);
+            resultado = 1;
+            return resultado;
+        }
+    }else{
+        resultado= 2;
+    }
+    
     return resultado;
     
     }

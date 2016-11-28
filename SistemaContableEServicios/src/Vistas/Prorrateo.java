@@ -11,11 +11,22 @@ import Modelos.Baseprorrateo;
 import Modelos.Centrodecosto;
 import Modelos.Cuenta;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.table.DefaultTableModel; 
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -28,8 +39,7 @@ public class Prorrateo extends javax.swing.JFrame {
     List<Centrodecosto> centros = costoCtrl.findCentrodecostoEntities();
     DefaultTableModel proTModel = new DefaultTableModel();
     List<String> nomBases = new ArrayList<>();
-    List<BigDecimal[]> coef = new ArrayList<>();
-    List<BigDecimal[]> datos = new ArrayList<>();
+    
     EntityManager entity = login.conexion.createEntityManager(); 
     /**
      * Creates new form Prorrateo
@@ -95,6 +105,8 @@ public class Prorrateo extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -145,6 +157,16 @@ public class Prorrateo extends javax.swing.JFrame {
             }
         });
 
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,23 +175,28 @@ public class Prorrateo extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 858, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(56, 56, 56)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 858, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(53, 53, 53))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(42, 42, 42)
-                        .addComponent(jScrollPane1)
-                        .addGap(21, 21, 21)))
-                .addGap(53, 53, 53))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(30, 30, 30)
-                .addComponent(jButton2)
-                .addGap(105, 105, 105))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton1)
+                                .addGap(51, 51, 51)
+                                .addComponent(jButton2)
+                                .addGap(88, 88, 88))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 933, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane2))
+                                .addContainerGap(30, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,13 +208,15 @@ public class Prorrateo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(28, 28, 28))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         pack();
@@ -195,7 +224,10 @@ public class Prorrateo extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // Generar pdf de prorrateo
-     
+        List<String> nomCuentas = new ArrayList<>();
+        List<BigDecimal[]> coef = new ArrayList<>();
+        List<BigDecimal[]> datos = new ArrayList<>();
+        
         for (int i = 0; i < nomBases.size(); i++) {
             Baseprorrateo baseActual = bases.get(i);
             //Calculando los procentajes para el prorrateo
@@ -211,31 +243,54 @@ public class Prorrateo extends javax.swing.JFrame {
             
             //Multiplicando los totales de cada cuenta para prorratear           
             //List<Cuenta> cuentas = baseActual.getCuentaList(); //Esto puede ser cambiado por una Query SQL que me devuelva los totales cuando la base sea igual al nombre        
-            
+            List<String> noms = entity.createNativeQuery("select nomcuenta from cuenta where idbase = "+baseActual.getIdbase()+";").getResultList();
             List<BigDecimal> cuentas = entity.createNativeQuery("select saldocuenta from cuenta where idbase = "+baseActual.getIdbase()+";").getResultList();
+            int k = 0;
             for(BigDecimal c:cuentas){
+                nomCuentas.add(noms.get(k));
                 BigDecimal[] prorra = new BigDecimal[centros.size()];
                 for (int j = 0; j < prorra.length; j++) {
                     prorra[j] = coefila[j].multiply(c/*.getSaldocuenta()*/);
                 }
                 datos.add(prorra);
+                k++;
             }
             //Fin prorrateo
             
         }
-        System.out.println("Prorrateo");
+        /*System.out.println("Prorrateo");
+        int j=0;
         for(BigDecimal[] c : datos){
-            System.out.println("\nFila");
+            System.out.println(nomCuentas.get(j));
             for (int i = 0; i < c.length; i++) {
-                System.out.println(c[i]);
+                System.out.println(c[i]+"\t");
             }
             System.out.println("Limit");
-        }
-
+            j++;
+        }*/
+        //Nombres de centros en 
         //Coeficientes en COEF
+        //Nombre de ceunta en nomCuentas
         //Resultado del prorrateo en DATOS
+        System.out.println(nomCuentas.size());
+        System.out.println(datos.size());
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Cuentas");
+        for(Centrodecosto c:centros){
+            model.addColumn(c.getNomcentro());
+        }
         
-       
+        Object[] rowData = new Object[centros.size()+1];
+        for (int i = 0; i < datos.size(); i++) {
+           rowData[0] = nomCuentas.get(i);
+            for (int j = 0; j < centros.size(); j++) {
+                rowData[j+1] = datos.get(i)[j];
+            }
+            model.addRow(rowData);
+        }
+        
+        jTable2.setModel(model);
+ 
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -248,7 +303,12 @@ public class Prorrateo extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
+        PrincipalContabilidad con = null;
+        try {
+            con = new PrincipalContabilidad();
+        } catch (SQLException ex) {
+            Logger.getLogger(Prorrateo.class.getName()).log(Level.SEVERE, null, ex);
+        }
         con.setVisible(true);
         con.setLocationRelativeTo(null);
         this.setVisible(false);
@@ -296,7 +356,9 @@ public class Prorrateo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bbf8485a-7117-4d78-8ac1-df865a7f4345">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#EFF7FF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="BMensuak" uuid="caa50185-7abb-4f78-bc47-d50923e112e5">
+		<queryString language="SQL">
+			<![CDATA[SELECT dd.codcuenta, cu.nomcuenta, sum(dd.debe) as Deudor, sum(dd.haber) as Acreedor, pc.fechaFin
+FROM detallediario dd
+INNER JOIN diario d
+ON dd.idregistro= d.idregistro
+INNER JOIN cuenta cu
+ON dd.codcuenta= cu.codcuenta
+INNER JOIN PeriodoContable pc
+ON d.idPeriodo=pc.idPeriodo
+WHERE d.idperiodo=1 and not((dd.debe=0) and (dd.haber=0))
+group by dd.codcuenta, cu.nomcuenta, pc.idPeriodo
+]]>
+		</queryString>
+		<field name="codcuenta" class="java.lang.String"/>
+		<field name="nomcuenta" class="java.lang.String"/>
+		<field name="deudor" class="java.math.BigDecimal"/>
+		<field name="acreedor" class="java.math.BigDecimal"/>
+		<field name="fechafin" class="java.sql.Date"/>
+	</subDataset>
+	<parameter name="PeriodoContable" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT dd.codcuenta, cu.nomcuenta, sum(dd.debe) as Deudor, sum(dd.haber) as Acreedor, pc.fechaFin
+FROM detallediario dd
+INNER JOIN diario d
+ON dd.idregistro= d.idregistro
+INNER JOIN cuenta cu
+ON dd.codcuenta= cu.codcuenta
+INNER JOIN PeriodoContable pc
+ON d.idPeriodo=pc.idPeriodo
+WHERE d.idperiodo=$P{PeriodoContable} and not((dd.debe=0) and (dd.haber=0))
+group by dd.codcuenta, cu.nomcuenta, pc.idPeriodo
+]]>
+	</queryString>
+	<field name="codcuenta" class="java.lang.String"/>
+	<field name="nomcuenta" class="java.lang.String"/>
+	<field name="deudor" class="java.math.BigDecimal"/>
+	<field name="acreedor" class="java.math.BigDecimal"/>
+	<field name="fechafin" class="java.sql.Date"/>
+	<variable name="deudor_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{deudor}]]></variableExpression>
+	</variable>
+	<variable name="acreedor_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{acreedor}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="155" y="49" width="242" height="20" uuid="374cfbcf-4f72-442e-8f7e-caf16cb1fe0d"/>
+				<text><![CDATA[BALANZA DE COMPROBACION ACUMULADO AL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="99" y="0" width="376" height="32" uuid="f2985d86-9d9c-4388-9019-468cce94cbcb"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[UDP AGENCIA MULTISERVICIOS]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="397" y="49" width="100" height="20" uuid="b9679963-d4a9-4fd8-a31c-4cc9c2e6944d"/>
+				<textFieldExpression><![CDATA[$F{fechafin}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="173" splitType="Stretch">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" x="100" y="0" width="555" height="171" uuid="69fe6acd-86de-491d-b1f7-978ad6cdf96f"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="BMensuak" uuid="93a1a777-66c2-4a23-b522-d1f68435d874">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:column width="90" uuid="45148ad5-a17f-42da-9e67-cc712c69cc20">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="25dcbe53-9043-4715-b836-116a0c73775e"/>
+								<text><![CDATA[codcuenta]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="2de0c869-77a7-403f-ac0e-363b238651ef"/>
+								<textFieldExpression><![CDATA[$F{codcuenta}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="558b95fa-6456-4f5d-8fd2-5bb912bc76f7">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="43c9435c-7f2a-4dc0-b0b7-bf03142808e8"/>
+								<text><![CDATA[nomcuenta]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="2950b178-6252-49f5-bf17-3bdd59d107ea"/>
+								<textFieldExpression><![CDATA[$F{nomcuenta}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="f504a236-e315-4f36-98d4-715ea9e266f6">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="2164a69d-a119-4c8b-8854-c7bb3724e76f"/>
+								<text><![CDATA[deudor]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="afd8f0fd-2ee1-4f17-9378-d97b7adfb989"/>
+								<textFieldExpression><![CDATA[$F{deudor}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90" uuid="3861c041-02c9-4b2c-9c05-130d6eea3ca4">
+						<jr:columnHeader style="table 1_CH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30" uuid="063545d6-05ea-4ef5-9da9-64792396e806"/>
+								<text><![CDATA[acreedor]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="30" rowSpan="1"/>
+						<jr:detailCell style="table 1_TD" height="20" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20" uuid="7329f850-2534-4a40-a417-35d7c422d986"/>
+								<textFieldExpression><![CDATA[$F{acreedor}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</pageHeader>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="297" y="0" width="100" height="20" uuid="68363c91-4ad6-4980-96f6-917659cb9a9b"/>
+				<textFieldExpression><![CDATA[$V{deudor_1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="0" width="100" height="20" uuid="0e0b0334-128a-421d-b4ee-7639f13a0bc2"/>
+				<textFieldExpression><![CDATA[$V{acreedor_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="9dba9ff2-b41d-45d1-81ef-faa50f983d73"/>
+				<text><![CDATA[Static text]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,43 @@
+SELECT
+     
+     CASE
+    WHEN (tc.idtipocuenta='11' or tc.idtipocuenta='12') THEN cu.codcuenta
+     END 
+  AS Cod_Activo,
+    CASE
+    WHEN (tc.idtipocuenta='11' or tc.idtipocuenta='12') THEN cu.nomcuenta
+     END 
+  AS Nom_Activo,
+     CASE
+    WHEN saldocuenta>=0 and(tc.idtipocuenta='11' or tc.idtipocuenta='12') THEN saldocuenta
+    ELSE 0
+  END 
+  AS debe_Activo, 
+   CASE
+    WHEN saldocuenta<0 and(tc.idtipocuenta='11' or tc.idtipocuenta='12') THEN -saldocuenta
+    ELSE 0
+  END 
+  AS haber_Activo,
+  CASE
+    WHEN (tc.idtipocuenta='21' or tc.idtipocuenta='22' or tc.idtipocuenta='31') THEN cu.codcuenta
+     END 
+  AS Cod_Pasivo,
+  CASE
+    WHEN (tc.idtipocuenta='21' or tc.idtipocuenta='22' or tc.idtipocuenta='31') THEN cu.nomcuenta
+     END 
+  AS Nom_Pasivo,
+  
+  CASE
+    WHEN saldocuenta>=0 and(tc.idtipocuenta='21' or tc.idtipocuenta='22' or tc.idtipocuenta='31') THEN saldocuenta
+    ELSE 0
+  END 
+  AS debe_Pacivo, 
+   CASE
+    WHEN saldocuenta<0 and(tc.idtipocuenta='21' or tc.idtipocuenta='22' or tc.idtipocuenta='31') THEN -saldocuenta
+    ELSE 0
+  END 
+  AS haber_Pasivo
+ from cuenta cu
+ INNER JOIN tipocuenta tc
+ON cu.idtipocuenta=tc.idtipocuenta
+WHERE cu.saldocuenta!=0

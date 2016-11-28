@@ -7,6 +7,9 @@ package Vistas;
 
 import Controladores.TipoCuentaControl;
 import Modelos.TCuentaTableModel;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
@@ -182,11 +185,15 @@ public static TCuentaTableModel cTuentaTModel=new TCuentaTableModel();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    try {
         // TODO add your handling code here:
         PrincipalContabilidad con = new PrincipalContabilidad();
         con.setVisible(true);
         con.setLocationRelativeTo(null);
         this.setVisible(false);
+    } catch (SQLException ex) {
+        Logger.getLogger(GestionarTiposCuentas.class.getName()).log(Level.SEVERE, null, ex);
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed

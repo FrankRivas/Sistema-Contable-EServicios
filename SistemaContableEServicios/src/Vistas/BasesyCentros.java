@@ -11,6 +11,7 @@ import Modelos.Baseprorrateo;
 import Modelos.Centrodecosto;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -493,11 +494,15 @@ public class BasesyCentros extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
         
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
-        con.setVisible(true);
-        con.setLocationRelativeTo(null);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            PrincipalContabilidad con = new PrincipalContabilidad();
+            con.setVisible(true);
+            con.setLocationRelativeTo(null);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(BasesyCentros.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed

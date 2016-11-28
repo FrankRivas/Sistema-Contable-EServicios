@@ -11,8 +11,11 @@ import Controladores.RolJpaController;
 import Modelos.Rol;
 import Modelos.RolTableModel;
 import static java.lang.Integer.parseInt;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -222,27 +225,46 @@ public class GestionarRoles extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        int val = tablaRoles.getSelectedRow();
-        int id = (int) tablaRoles.getValueAt(val, 0);
+        try{
+            int val = tablaRoles.getSelectedRow();
+            int id = (int) tablaRoles.getValueAt(val, 0);
+            
+            int r=RolControl.borrar(id);
         
-        if(RolControl.borrar(id)){
-        JOptionPane.showMessageDialog(null, "Rol Eliminado con Exito");
-        RolControl.consultaInicial();
-        txtDRol.setText("");
-        txtNRol.setText("");
-        }else{
-        JOptionPane.showMessageDialog(null, "No se pudo Eliminar el Rol"); 
-        txtDRol.setText("");
-        txtNRol.setText("");
+            switch(r){
+                case 0:
+                    JOptionPane.showMessageDialog(null, "Rol Eliminado con Exito");
+                    RolControl.consultaInicial();
+                    txtDRol.setText("");
+                    txtNRol.setText("");
+                    break;
+                case 1:
+                    JOptionPane.showMessageDialog(null, "No se pudo Eliminar el Rol"); 
+                    txtDRol.setText("");
+                    txtNRol.setText("");
+                    break;
+                case 2:
+                    JOptionPane.showMessageDialog(null, "Actualmente hay Usuarios asociados a este rol, por favor asigne otro rol a estos usuarios antes de eliminarlo"); 
+                    txtDRol.setText("");
+                    txtNRol.setText("");
+                    break;
+            }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Seleccione el Rol que desea Eliminar");
         }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
-        con.setVisible(true);
-        con.setLocationRelativeTo(null);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            PrincipalContabilidad con = new PrincipalContabilidad();
+            con.setVisible(true);
+            con.setLocationRelativeTo(null);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionarRoles.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed

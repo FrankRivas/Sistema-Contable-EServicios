@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/Planilla.java</file>
-            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/RentaControl.java</file>
-            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/CatalogoCuentas.java</file>
-            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/BaseprorrateoJpaController.java</file>
-            <file>file:/C:/Users/Benjamín/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/BasesyCentros.java</file>
+            <file>file:/C:/Users/Merii/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/ImpuestosControl.java</file>
+            <file>file:/C:/Users/Merii/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Vistas/GestionarRetencionImpuesto.java</file>
+            <file>file:/C:/Users/Merii/Desktop/Sistema-Contable-EServicios/SistemaContableEServicios/src/Controladores/RentaControl.java</file>
         </group>
     </open-files>
 </project-private>

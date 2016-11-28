@@ -9,7 +9,13 @@ import Controladores.ImpuestosControl;
 import Controladores.RentaControl;
 import Modelos.ImpuestosTableModel;
 import Modelos.RentaTableModel;
+<<<<<<< HEAD
 import javax.swing.JOptionPane;
+=======
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+>>>>>>> origin/master
 
 /**
  *
@@ -405,11 +411,15 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        PrincipalContabilidad con = new PrincipalContabilidad();
-        con.setVisible(true);
-        con.setLocationRelativeTo(null);
-        this.setVisible(false);
+        try {
+            // TODO add your handling code here:
+            PrincipalContabilidad con = new PrincipalContabilidad();
+            con.setVisible(true);
+            con.setLocationRelativeTo(null);
+            this.setVisible(false);
+        } catch (SQLException ex) {
+            Logger.getLogger(GestionarRetencionImpuesto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void tablaRentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaRentasMouseClicked

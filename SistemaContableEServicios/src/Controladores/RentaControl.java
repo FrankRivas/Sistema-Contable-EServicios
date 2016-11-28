@@ -12,6 +12,7 @@ import static Vistas.GestionarRetencionImpuesto.rentaTModel;
 import static Vistas.GestionarRetencionImpuesto.tablaRentas;
 import Vistas.login;
 import static java.lang.Integer.parseInt;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableColumnModel;
@@ -79,6 +80,26 @@ public class RentaControl {
         }catch(Exception e){
             System.out.print(e);
         }
+    }
+             
+    public static boolean Modificar(int id,double desde,double hasta,double cuota, double por, double sobre){
+    boolean resultado = true;
+    Techo t = new Techo();
+    TechoJpaController tControl = new TechoJpaController(login.conexion);
+    t = tControl.findTecho(id);
+    t.setCuotafija(BigDecimal.valueOf(cuota));
+    t.setDesde(BigDecimal.valueOf(desde));
+    t.setHasta(BigDecimal.valueOf(hasta));
+    t.setPorcenaplicar(BigDecimal.valueOf(por));
+    t.setSobreexceso(BigDecimal.valueOf(sobre));
+    try{
+    tControl.edit(t);
+    }catch(Exception e){
+    System.out.print(e);
+    resultado = false;
+    return resultado;
+    }
+    return resultado;
     }
         
         

@@ -5,8 +5,11 @@
  */
 package Vistas;
 
+import Controladores.ImpuestosControl;
 import Controladores.RentaControl;
+import Modelos.ImpuestosTableModel;
 import Modelos.RentaTableModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,6 +18,7 @@ import Modelos.RentaTableModel;
 public class GestionarRetencionImpuesto extends javax.swing.JFrame {
     
     public static RentaTableModel rentaTModel = new RentaTableModel();
+    public static ImpuestosTableModel impTModel = new ImpuestosTableModel();
     /**
      * Creates new form GestionarRetencionImpuesto
      */
@@ -22,6 +26,8 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
         initComponents();
         RentaControl.inicializarColumnas();
         RentaControl.consultaInicial();
+        ImpuestosControl.inicializarColumnas();
+        ImpuestosControl.consultaInicial();
     }
 
     /**
@@ -39,9 +45,9 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtNombre = new javax.swing.JTextField();
+        txtPorcent = new javax.swing.JTextField();
+        btnGuardar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
@@ -52,7 +58,7 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tablaImpuestos = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -63,12 +69,12 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        txtDesde = new javax.swing.JTextField();
+        txtHasta = new javax.swing.JTextField();
+        txtPorcen = new javax.swing.JTextField();
+        txtSexceso = new javax.swing.JTextField();
+        txtCfija = new javax.swing.JTextField();
+        btnGuardar2 = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -81,7 +87,12 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
 
         jLabel7.setText("Porcentaje:");
 
-        jButton1.setText("Guardar");
+        btnGuardar.setText("Guardar");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Modificar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -102,12 +113,12 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
-                    .addComponent(jTextField3))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                    .addComponent(txtPorcent))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(57, 57, 57)
-                .addComponent(jButton1)
+                .addComponent(btnGuardar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
                 .addComponent(jButton2)
                 .addGap(52, 52, 52))
@@ -120,14 +131,14 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPorcent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnGuardar)
                     .addComponent(jButton2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -137,6 +148,11 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
         jLabel2.setText("Porcentajes Aplicados");
 
         tablaRentas.setModel(rentaTModel);
+        tablaRentas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaRentasMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tablaRentas);
 
         jLabel4.setText("ISR");
@@ -164,22 +180,22 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
                 .addGap(101, 101, 101))
         );
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Identificador", "Retencion", "Porcentaje"
+        tablaImpuestos.setModel(impTModel);
+        tablaImpuestos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaImpuestosMouseClicked(evt);
             }
-        ));
-        jScrollPane3.setViewportView(jTable3);
+        });
+        jScrollPane3.setViewportView(tablaImpuestos);
 
         jLabel3.setText("Otras Retenciones o Impuestos");
 
         jButton5.setText("Eliminar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -227,7 +243,12 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
 
         jLabel13.setText("Cuota Fija:");
 
-        jButton3.setText("Guardar");
+        btnGuardar2.setText("Guardar");
+        btnGuardar2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardar2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -248,14 +269,14 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
                             .addComponent(jLabel13))
                         .addGap(22, 22, 22)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField4)
-                            .addComponent(jTextField5)
-                            .addComponent(jTextField6)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                            .addComponent(txtDesde)
+                            .addComponent(txtHasta)
+                            .addComponent(txtPorcen)
+                            .addComponent(txtSexceso)
+                            .addComponent(txtCfija, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGap(36, 36, 36)
-                                .addComponent(jButton3)))))
+                                .addComponent(btnGuardar2)))))
                 .addContainerGap(66, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -268,24 +289,24 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
                         .addGap(29, 29, 29)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel11))
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPorcen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSexceso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCfija, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(btnGuardar2)
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -365,6 +386,22 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+       String nombre = txtNombre.getText();
+       Double porce = Double.parseDouble(txtPorcent.getText());
+        int val = tablaImpuestos.getSelectedRow();
+        int id = (int) tablaImpuestos.getValueAt(val, 0);
+       
+       if(ImpuestosControl.Modificar(id,nombre, porce)){
+       JOptionPane.showMessageDialog(null, "Retencion Modificada con Exito");
+       ImpuestosControl.consultaInicial();
+       txtNombre.setText("");
+       txtPorcent.setText("");
+       }else{
+       JOptionPane.showMessageDialog(null, "Error al Modificar");
+       txtNombre.setText("");
+       txtPorcent.setText("");
+       }
+        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -374,6 +411,102 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
         con.setLocationRelativeTo(null);
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void tablaRentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaRentasMouseClicked
+        // TODO add your handling code here:
+        int clics = evt.getClickCount();
+        if(clics==2){
+        int val = tablaRentas.getSelectedRow();
+        String desde = (tablaRentas.getValueAt(val, 1)).toString();
+        String hasta = (tablaRentas.getValueAt(val, 2)).toString();
+        String porcen = (tablaRentas.getValueAt(val, 3)).toString();
+        String sexceso = (tablaRentas.getValueAt(val, 4)).toString();
+        String cfija = (tablaRentas.getValueAt(val, 5)).toString();
+        
+        txtCfija.setText(cfija);
+        txtDesde.setText(desde);
+        txtHasta.setText(hasta);
+        txtPorcen.setText(porcen);
+        txtSexceso.setText(sexceso);
+        }
+    }//GEN-LAST:event_tablaRentasMouseClicked
+
+    private void tablaImpuestosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaImpuestosMouseClicked
+        // TODO add your handling code here:
+        int clics = evt.getClickCount();
+        if(clics==2){
+        int val = tablaImpuestos.getSelectedRow();
+        String nombre = (tablaImpuestos.getValueAt(val, 1)).toString();
+        String porcen = (tablaImpuestos.getValueAt(val, 2)).toString();
+        
+        txtNombre.setText(nombre);
+        txtPorcent.setText(porcen);
+        btnGuardar.setEnabled(false);
+        }
+    }//GEN-LAST:event_tablaImpuestosMouseClicked
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        String nombre = txtNombre.getText();
+       Double porce = Double.parseDouble(txtPorcent.getText());
+       
+       if(ImpuestosControl.Guardar(nombre, porce)){
+       JOptionPane.showMessageDialog(null, "Retencion Guardada con Exito");
+       ImpuestosControl.consultaInicial();
+       txtNombre.setText("");
+       txtPorcent.setText("");
+       }else{
+       JOptionPane.showMessageDialog(null, "Error al Guardar");
+       txtNombre.setText("");
+       txtPorcent.setText("");
+       }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        int val = tablaImpuestos.getSelectedRow();
+        int id = (int) tablaImpuestos.getValueAt(val, 0);
+       
+       if(ImpuestosControl.Eliminar(id)){
+       JOptionPane.showMessageDialog(null, "Retencion Eliminada con Exito");
+       ImpuestosControl.consultaInicial();
+       txtNombre.setText("");
+       txtPorcent.setText("");
+       }else{
+       JOptionPane.showMessageDialog(null, "Error al Eliminar");
+       txtNombre.setText("");
+       txtPorcent.setText("");
+       }
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void btnGuardar2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardar2ActionPerformed
+        // TODO add your handling code here:
+        int val = tablaRentas.getSelectedRow();
+        int id = (int) tablaRentas.getValueAt(val, 0);
+        Double desde = Double.parseDouble(txtDesde.getText());
+        Double hasta = Double.parseDouble(txtHasta.getText());
+        Double cuota = Double.parseDouble(txtCfija.getText());
+        Double por = Double.parseDouble(txtPorcen.getText());
+        Double sobre = Double.parseDouble(txtSexceso.getText());
+        
+        if(RentaControl.Modificar(id, desde, hasta, cuota, por, sobre)){
+        JOptionPane.showMessageDialog(null, "Renta Modificada con Exito");
+        RentaControl.consultaInicial();
+        txtDesde.setText("");
+        txtCfija.setText("");
+        txtHasta.setText("");
+        txtPorcen.setText("");
+        txtSexceso.setText("");
+        }else{
+        JOptionPane.showMessageDialog(null, "Error al Modificar");
+        txtDesde.setText("");
+        txtCfija.setText("");
+        txtHasta.setText("");
+        txtPorcen.setText("");
+        txtSexceso.setText(""); 
+        }
+    }//GEN-LAST:event_btnGuardar2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -411,9 +544,9 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnGuardar2;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
@@ -439,14 +572,14 @@ public class GestionarRetencionImpuesto extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    public static javax.swing.JTable tablaImpuestos;
     public static javax.swing.JTable tablaRentas;
+    private javax.swing.JTextField txtCfija;
+    private javax.swing.JTextField txtDesde;
+    private javax.swing.JTextField txtHasta;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtPorcen;
+    private javax.swing.JTextField txtPorcent;
+    private javax.swing.JTextField txtSexceso;
     // End of variables declaration//GEN-END:variables
 }

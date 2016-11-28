@@ -469,6 +469,12 @@ public class CatalogoCuentas extends javax.swing.JFrame {
 
     private void tablaCuentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaCuentasMouseClicked
         // TODO add your handling code here:
+        int clics = evt.getClickCount();
+        if(clics==2){
+        int val = tablaCuentas.getSelectedRow();
+        String cod = (String) tablaCuentas.getValueAt(val, 0);
+        
+        }
     }//GEN-LAST:event_tablaCuentasMouseClicked
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed

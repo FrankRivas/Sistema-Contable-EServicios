@@ -65,28 +65,11 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd/MM/yyyy");
         Date now = new Date();
         txtFecha.setText(sdfDate.format(now));
-        llenarComboBox();
+        
         
     }
     
-    public void llenarComboBox() throws SQLException{
-        try {
-            Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
-            String sql="SELECT distinct * FROM periodocontable";
-            Statement stmnt=conexion.createStatement();
-            ResultSet rs = stmnt.executeQuery(sql);
-            while(rs.next()){
-            int x=  Integer.parseInt(rs.getObject(1).toString());
-                System.out.println(x);
-            jComboBox1.addItem(rs.getObject(3));
-            jComboBox1.setSelectedIndex(x-1);
-            }
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(PrincipalContabilidad.class.getName()).log(Level.SEVERE, null, ex);
-        }
-            
-    }
+    
     
     private void inicializarColumnas(){
         TableColumnModel tColumnModel=new DefaultTableColumnModel();
@@ -127,7 +110,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
         btnAceptar = new javax.swing.JButton();
         btnAgregarTransac = new javax.swing.JButton();
         txtFecha = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         Archivo = new javax.swing.JMenu();
         catalogoCuentas = new javax.swing.JMenuItem();
@@ -406,8 +388,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAgregarTransac))
                     .addGroup(layout.createSequentialGroup()
@@ -427,13 +407,12 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(48, 48, 48)
+                        .addGap(51, 51, 51)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(47, Short.MAX_VALUE)
                         .addComponent(btnAgregarTransac)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -609,26 +588,14 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     }//GEN-LAST:event_cuentasContablesActionPerformed
 
     private void balanzaMensualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanzaMensualActionPerformed
-        // TODO add your handling code here:}
         try {
-            Class.forName("org.postgresql.Driver");
-            Connection conexion = DriverManager.getConnection("jdbc:postgresql://localhost:5432/contables","contador","sic115");
-            String archivo="src\\BalanceCompMensual.jasper"; 
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(archivo);
-             Map parametro = new HashMap();
-            parametro.put("PeriodoContable",jComboBox1.getSelectedIndex()+1);
-            JasperPrint jprint= JasperFillManager.fillReport(reporte, parametro, conexion);
-            JasperViewer viewReport= new JasperViewer(jprint, false);
-            viewReport.setTitle("Balance de comprobacion "+ jComboBox1.getSelectedItem());
-            viewReport.setVisible(true);
-            
-        } catch (ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            // TODO add your handling code here:}
+            BalanceComprobacionMensual BCM= new BalanceComprobacionMensual();
+            BCM.setVisible(true);
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(null, ex);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+            Logger.getLogger(PrincipalContabilidad.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_balanzaMensualActionPerformed
 
     private void balanzaAcumuladaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_balanzaAcumuladaActionPerformed
@@ -809,7 +776,6 @@ public class PrincipalContabilidad extends javax.swing.JFrame {
     private javax.swing.JMenuItem cuentasContables;
     private javax.swing.JMenuItem estadoResultados;
     private javax.swing.JMenuItem issss;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;

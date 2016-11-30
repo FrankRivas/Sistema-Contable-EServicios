@@ -9,13 +9,13 @@ import Controladores.ImpuestosControl;
 import Controladores.RentaControl;
 import Modelos.ImpuestosTableModel;
 import Modelos.RentaTableModel;
-<<<<<<< HEAD
+
 import javax.swing.JOptionPane;
-=======
+
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
->>>>>>> origin/master
+
 
 /**
  *
